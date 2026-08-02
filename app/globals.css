@@ -1,0 +1,326 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   MILA BARBER · Sistema de diseño
+   Los tokens viven aquí y SÓLO aquí. Las utilidades de Tailwind se generan a
+   partir de este @theme, así que no existe forma de usar un color o un espaciado
+   que no esté declarado en el sistema. Regla: si algo no está en esta lista,
+   no se usa en el diseño.
+
+   Criterio: esto no es un catálogo, es un escaparate. Quien entra viene de
+   Instagram o de una búsqueda de «barbería» y decide en cinco segundos si pide
+   cita. De ahí las tres decisiones de fondo:
+
+   1. SIEMPRE OSCURO, y con negro cálido, no azulado. La barbería es negra, madera
+      y luz de tungsteno: un gris frío la convertiría en una web de tecnología.
+      No hay modo claro; no es una omisión, es la identidad.
+   2. UN ÚNICO ACENTO DORADO, y reservado a lo accionable: pedir cita, el precio,
+      la página en la que estás. En cuanto el dorado decora, deja de significar
+      «pulsa aquí» y la llamada a la acción se pierde entre adornos.
+   3. TITULARES EN CONDENSADA MAYÚSCULA. Es la letra del propio logotipo —cartel
+      de barbería— y es lo que hace que el sitio se reconozca como Mila Barber sin
+      necesidad de repetir la marca en cada sección.
+   ========================================================================= */
+
+@theme {
+  /* --- Color: negro cálido, hueso y un dorado de acción ------------------- */
+  --color-night: #0a0908; /* fondo del sitio, negro con tinte cálido */
+  --color-coal: #141110; /* tarjetas y bloques alternos */
+  --color-smoke: #1e1a17; /* hover de tarjeta, celdas */
+  --color-line: #2c2622; /* filetes de 1px */
+
+  --color-bone: #f4efe7; /* texto principal, blanco roto */
+  --color-bone-soft: #a79d90; /* texto secundario */
+  --color-bone-faint: #6e6459; /* metadatos, unidades, versalitas */
+
+  /* Acento único, sólo para lo accionable y para el dato de precio. Dorado
+     tostado: destaca sobre el negro y mantiene contraste AA (8,4:1) sin ser
+     amarillo de aviso. */
+  --color-gold: #e0a938;
+  --color-gold-deep: #a97c22; /* bordes y estados pulsados */
+
+  /* Rojo apagado. Un solo uso: cerrar sesión y cancelar una cita. Cuanto menos
+     aparezca, más se entiende que significa «esto deshace algo». */
+  --color-alert: #c9705f;
+
+  /* --- Tipografía: una condensada de cartel + una sans de lectura -------- */
+  /* Oswald es la condensada de rótulo: en mayúsculas y apretada recuerda al
+     logotipo, y aguanta a 11 px de versalita igual que a 72 px de titular.
+     Barlow lleva el texto corrido; es de la misma familia de proporciones, así
+     que un titular y su párrafo no parecen dos tipografías peleando. */
+  --font-display: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+
+  /* Escala fluida: un solo valor por peldaño, sin variantes intermedias.
+     clamp() evita media queries para tipografía y elimina saltos bruscos. */
+  --text-micro: 0.6875rem; /* 11px · versalitas, duración, etiquetas */
+  --text-micro--line-height: 1.4;
+  --text-micro--letter-spacing: 0.18em;
+  --text-small: 0.8125rem; /* 13px · metadatos, pies */
+  --text-small--line-height: 1.5;
+  --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --text-lead--line-height: 1.5;
+  --text-title: clamp(1.75rem, 1.3rem + 1.8vw, 3rem);
+  --text-title--line-height: 1.1;
+  --text-title--letter-spacing: 0.01em;
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: 0.005em;
+
+  /* Cifra de precio. Va siempre con `tabular-nums`: en una rejilla de servicios
+     los importes tienen que caer en la misma vertical aunque uno tenga dos
+     dígitos y otro uno. */
+  --text-price: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  --text-price--line-height: 1;
+
+  /* --- Ritmo espacial: escala limitada, saltos claros -------------------- */
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem); /* margen lateral de página */
+  --spacing-section: clamp(4rem, 9vw, 9rem); /* aire vertical entre bloques */
+
+  /* Alto de la barra de navegación inferior de móvil. Vive en el sistema porque lo
+     necesitan cuatro sitios que tienen que cuadrar al píxel: la barra, el panel del
+     menú que se abre justo encima, el hueco que el hero se reserva para no meter su
+     llamada a la acción debajo de ella y el que el <body> se reserva bajo el pie.
+     El `env()` es la franja del gesto de inicio del iPhone: sin sumarla, los iconos
+     caen debajo de la rayita del sistema. */
+  --spacing-nav-mobile: calc(4rem + env(safe-area-inset-bottom));
+
+  /* --- Movimiento -------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-reveal: reveal 0.9s var(--ease-out-soft) both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+
+@layer base {
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-night);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* El header es sticky: los anclajes no deben quedar debajo. */
+    scroll-padding-top: 6rem;
+    /* El sitio es oscuro por definición: se lo decimos al navegador para que
+       pinte de negro las barras nativas y los formularios, y sobre todo para que
+       el rebote de scroll de iOS no destape una franja blanca al final. */
+    color-scheme: dark;
+    background-color: var(--color-night);
+  }
+
+  body {
+    background-color: var(--color-night);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* La barra de navegación de móvil va fija sobre el contenido, así que el documento se
+     reserva su alto por debajo del pie. Sin esto, el teléfono y la dirección del pie
+     quedan tapados justo en el final de la página, que es donde más se necesitan. */
+  @media (width < 64rem) {
+    body {
+      padding-bottom: var(--spacing-nav-mobile);
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* Foco visible y coherente en todo el sitio (accesibilidad). */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  img,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    height: auto;
+  }
+
+  /* Nadie debería marearse con nuestras animaciones. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================================================
+   Utilidades del sistema
+   Sólo patrones que se repiten de verdad. Todo lo demás, utilidades de Tailwind.
+   ========================================================================= */
+
+@utility page-gutter {
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Etiqueta en versalitas: rótulos de sección, duración de un servicio, categoría.
+   Va en la condensada y muy espaciada, que es como se rotula un cartel. */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  letter-spacing: var(--text-micro--letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-bone-faint);
+}
+
+/* Precio. `tabular-nums` es lo que mantiene los importes alineados en la rejilla
+   de servicios cuando unos tienen dos dígitos y otros uno. */
+@utility price {
+  font-family: var(--font-display);
+  font-size: var(--text-price);
+  line-height: var(--text-price--line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gold);
+}
+
+/* Enlace con subrayado que se dibuja al hacer hover.
+   El trazo crece desde el CENTRO y no desde la izquierda: con el texto de las secciones
+   centrado, un subrayado que arranca en el borde izquierdo tira del ojo hacia fuera del
+   eje en el que está montada toda la página. Desde el centro, crece sobre ese mismo eje. */
+@utility link-underline {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.15em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.45s var(--ease-out-soft);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Amplía el área pulsable a los 24 px que exige WCAG 2.2 sin cambiar el diseño:
+   el texto sigue midiendo lo que mide y el subrayado sigue pegado a él; lo que
+   crece es una capa invisible por encima. Imprescindible en los enlaces pequeños
+   (pie, contacto, redes) cuando se usan con el dedo. */
+@utility tap {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: -0.25rem;
+    inset-block: -0.4rem;
+  }
+}
+
+/* Aparición al entrar en viewport. La hace CSS con scroll-driven animations
+   cuando el navegador las soporta (cero JS); si no, el contenido se ve fijo. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+
+/* EL BOTÓN. Uno solo en todo el sitio, en dos intensidades. El dorado macizo se
+   reserva a «pedir cita» —la acción por la que existe esta web— y el de contorno
+   a todo lo demás. Que sólo haya un botón lleno por pantalla es la regla que hace
+   que se vea sin buscarlo. */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding-inline: 1.6rem;
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  letter-spacing: var(--text-micro--letter-spacing);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  transition:
+    background-color 0.35s var(--ease-out-soft),
+    color 0.35s var(--ease-out-soft),
+    border-color 0.35s var(--ease-out-soft);
+}
+
+@utility btn-gold {
+  background: var(--color-gold);
+  color: var(--color-night);
+
+  &:hover {
+    background: var(--color-bone);
+  }
+}
+
+@utility btn-ghost {
+  border-color: var(--color-line);
+  color: var(--color-bone);
+
+  &:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+}
+
+/* Trama de placeholder de fotografía. Existe porque el sitio se monta ANTES de
+   tener el material definitivo de la barbería: estos huecos deben verse como
+   huecos, no disimularse. Cuando la foto esté en Sanity, <Figure> deja de pintar
+   esto y no hay nada que borrar. */
+@utility placeholder-grid {
+  background-color: var(--color-coal);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 8px,
+    color-mix(in srgb, var(--color-line) 70%, transparent) 8px 9px
+  );
+}

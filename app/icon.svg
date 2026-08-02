@@ -1,0 +1,20 @@
+<!--
+  El favicon. Sólo la navaja del logotipo, en dorado sobre el negro cálido de la web.
+
+  Las letras no entran: «MILA BARBER» a 16 px es una mancha gris. La navaja es la única
+  parte de la marca que se sigue leyendo como algo a ese tamaño, y es la que distingue la
+  pestaña de las otras veinte que hay abiertas. El fondo va pintado y no transparente
+  porque una pestaña se ve sobre gris claro o sobre gris oscuro según el tema del sistema,
+  y una silueta dorada sobre transparente desaparece en uno de los dos.
+
+  SVG y no ICO: escala solo a los tamaños que pida cada sitio (pestaña, marcador, atajo en
+  el escritorio) sin mantener cuatro ficheros. Ver components/layout/Wordmark.tsx para el
+  dibujo completo de la marca.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0a0908" />
+  <g fill="#e0a938" transform="translate(2 27) scale(0.94 1.9)">
+    <path d="M2 3.4h38.5l4.5 3.2H6.2A4.2 4.2 0 0 1 2 3.4Z" />
+    <path d="M45.8 5.9 62 2.2l.6 2.1-16.2 3.7-.6-2.1Z" />
+  </g>
+</svg>
