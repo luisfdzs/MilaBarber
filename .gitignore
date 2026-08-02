@@ -1,0 +1,81 @@
+# === MILA BARBER — .gitignore ===
+# REGLA DE SEGURIDAD (proyecto): NUNCA se sincronizan credenciales, keys, API keys,
+# tokens de MCPs ni variables de entorno con GitHub. Cada vez que se añada un secreto
+# nuevo o un fichero local de configuración de un desarrollador para una integración,
+# hay que incluirlo aquí ANTES de subir nada.
+
+# --- Secretos y variables de entorno ---
+.env
+.env.*
+*.env
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials.json
+secrets.json
+service-account*.json
+*.secret
+*.secrets
+*_secret*
+*apikey*
+*api-key*
+*.token
+*token*.json
+
+# --- Códigos de recuperación / ficheros sensibles sueltos ---
+recovery-codes.txt
+*recovery-code*
+*recovery-codes*
+
+# --- MCPs con tokens / credenciales ---
+.mcp.local.json
+mcp.local.json
+**/mcp-credentials*.json
+
+# --- Config local de cada desarrollador para integraciones ---
+*.local.env
+.vscode/*.local.json
+.idea/
+
+# --- Contexto de Claude ---
+# Vive en la rama `claude`, no en las de código. Ignorado aquí para que el contexto
+# no se cuele en develop/test/prod al trabajar con las dos ramas en el mismo árbol.
+.claude/
+
+# --- Dependencias / build ---
+node_modules/
+dist/
+build/
+.next/
+out/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Sistema operativo ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# --- Next.js / Vercel ---
+.vercel
+next-env.d.ts
+*.tsbuildinfo
+
+# --- Másteres del montaje de portada ---
+# El material en bruto del que `npm run hero` corta los planos del vídeo de portada.
+# Pesa cientos de megas y se puede volver a obtener; lo que sí va al repositorio es el
+# resultado ya comprimido, en public/hero/.
+.hero-src/
+
+# --- Material original del cliente ---
+# Fotos y vídeos a resolución completa que manda la barbería. Al repositorio sólo van
+# las versiones optimizadas de public/, o directamente a Sanity.
+fotos-originales/

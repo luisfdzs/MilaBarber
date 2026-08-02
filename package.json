@@ -1,0 +1,47 @@
+{
+  "name": "milabarber",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && prettier --check .",
+    "format": "prettier --write .",
+    "hero": "node scripts/build-hero-montage.mjs",
+    "db:setup": "node scripts/db-setup.mjs"
+  },
+  "dependencies": {
+    "@auth/mongodb-adapter": "^3.11.3",
+    "@sanity/client": "^7.25.0",
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.6.0",
+    "bcryptjs": "^3.0.2",
+    "mongodb": "^6.21.0",
+    "next": "^16.2.11",
+    "next-auth": "^5.0.0-beta.32",
+    "next-sanity": "^13.2.1",
+    "nodemailer": "^8.0.11",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^24.5.2",
+    "@types/nodemailer": "^8.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "^16.2.11",
+    "prettier": "^3.9.6",
+    "sanity": "^6.6.0",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2"
+  }
+}
