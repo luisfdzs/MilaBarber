@@ -119,15 +119,16 @@ pinta, pero todo lo que toca datos ajenos lo comprueba otra vez contra la base
 
 ## Pendiente
 
-- **Contraseña de aplicación de Gmail** para `SMTP_PASSWORD`. Sin ella la recuperación de
-  contraseña no envía nada: se registra el aviso y la web sigue funcionando.
-- **Material gráfico.** No hay `public/`: ni fotos ni vídeo de portada. La web está escrita
-  para verse bien sin ellos (`lib/hero.ts`, `components/ui/Figure.tsx`), pero es lo primero
-  que hay que pedir a la barbería.
-- **Contenido en Sanity.** El dataset está vacío y la web tira de `content/seed.ts`. En
-  cuanto se publique algo en `/admin`, manda el CMS.
-- **Webhook de revalidación** en sanity.io/manage › API › Webhooks, apuntando a
-  `/api/revalidate` con `SANITY_REVALIDATE_SECRET`. Mientras no esté, el contenido tarda
-  media hora en refrescarse en vez de nueve segundos.
+- **Vídeo de portada.** No hay `public/`: la portada se sirve con el fondo de la casa. Los
+  29 reels del Instagram son la materia prima de `npm run hero`, que pide ffmpeg y el
+  material en bruto en `.hero-src/`.
+- **Fotos del equipo.** Las fichas de Hassan y Mohammed siguen con el hueco tramado de
+  `<Figure>`. Se suben desde `/admin`.
+- **Separar la base de datos de test y producción.** Hoy los dos entornos usan la misma
+  `MONGODB_URI`, así que una reserva de prueba aparece en la agenda real. Implica tocar
+  `DB_NAME` en `lib/db.ts` y dar permiso sobre la segunda base al usuario de Atlas.
 - **Dominio.** `prod` sirve en `milabarber.vercel.app`. Migrar milabarberr.com es decisión
   del cliente.
+
+Ya resuelto: correo saliente por Gmail, webhooks de revalidación en los dos entornos, y la
+galería con trece fotos publicadas en Sanity (seis en la tira de la portada).
