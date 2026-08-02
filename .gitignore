@@ -79,3 +79,6 @@ next-env.d.ts
 # Fotos y vídeos a resolución completa que manda la barbería. Al repositorio sólo van
 # las versiones optimizadas de public/, o directamente a Sanity.
 fotos-originales/
+
+.vercel
+.env*

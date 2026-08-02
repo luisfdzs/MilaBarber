@@ -22,13 +22,16 @@ import { parseIsoDay, toIsoDay } from './format'
  * Sanity, que es otro sistema; un documento borrado allí no puede dejar una cita sin
  * nombre aquí.
  *
- * ⚠️ TODO ESTE FICHERO CUENTA LAS HORAS EN LA ZONA HORARIA DEL SERVIDOR. En local eso es
+ * ⚠️ TODO ESTE FICHERO CUENTA LAS HORAS EN LA ZONA HORARIA DEL PROCESO. En local eso es
  * la de tu máquina y todo cuadra; **en Vercel, por defecto, es UTC**, y en verano España
  * va dos horas por delante: la barbería abriría a las 11:00 y el último hueco de la tarde
- * desaparecería. Por eso el despliegue lleva `TZ=Europe/Madrid` como variable de entorno,
- * en los dos proyectos y en los tres entornos (ver `.env.example` y el README).
+ * desaparecería. Por eso `instrumentation.ts` fija `Europe/Madrid` en el arranque del
+ * servidor, antes de la primera petición.
  *
- * Se resuelve con la variable en vez de con una librería de zonas horarias a propósito:
+ * **No es una variable de entorno**: `TZ` está reservada en Vercel y no se puede definir
+ * (ver el comentario largo de `instrumentation.ts`).
+ *
+ * Se resuelve con la zona del proceso en vez de con una librería de husos a propósito:
  * este negocio está en una sola ciudad y todas sus horas son horas de Pamplona. Meter
  * conversiones por todas partes para un caso que no existe sólo añade sitios donde
  * equivocarse.
