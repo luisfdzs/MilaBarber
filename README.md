@@ -64,18 +64,17 @@ Todas están explicadas en `.env.example`. Las imprescindibles:
 
 | Rama | Proyecto de Vercel | URL | Indexable |
 |---|---|---|---|
-| `develop` | — (no despliega) | — | — |
+| `dev` | — (no despliega) | — | — |
 | `test` | `milabarbertest` | milabarbertest.vercel.app | **No** |
 | `prod` | `milabarber` | milabarber.vercel.app | Sí |
-| `claude` | — (no despliega) | Contexto, reglas y memoria de Claude | — |
 
-`develop` y `claude` tienen el despliegue apagado en `vercel.json`. Cada proyecto de test
+`dev` tiene el despliegue apagado en `vercel.json`. Cada proyecto de test
 despliega **su** rama como si fuera producción, así que `VERCEL_ENV` vale `production` en
 los dos: por eso `lib/site-env.ts` decide qué se indexa mirando **la rama** y no el
 entorno. Sin esa distinción, el dominio de test competiría en Google con el de verdad por
 las mismas búsquedas.
 
-Las promociones son `develop → test → prod` con `git merge --no-ff`. **Nunca squash**: crea
+Las promociones son `dev → test → prod` con `git merge --no-ff`. **Nunca squash**: crea
 SHA nuevos, las ramas dejan de compartir historia y cada promoción reabre conflictos ya
 resueltos.
 
