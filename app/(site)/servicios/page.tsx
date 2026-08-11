@@ -13,17 +13,6 @@ export const metadata: Metadata = {
   alternates: { canonical: '/servicios' },
 }
 
-/**
- * LA CARTA COMPLETA.
- *
- * Es la página que más se comparte por WhatsApp de una barbería —«mira los precios»— y por
- * eso tiene URL propia y no es un ancla de la portada: un enlace a `/#servicios` deja a
- * quien lo abre en mitad de una página de la que no ha visto el principio.
- *
- * Las tarjetas van sin el enlace de «reservar este servicio» (`bookable={false}`): el
- * botón de reservar está arriba y abajo, y repetirlo siete veces en medio de la lista lo
- * convierte en ruido en vez de en llamada.
- */
 export default async function ServicesPage() {
   const services = await getServices()
 

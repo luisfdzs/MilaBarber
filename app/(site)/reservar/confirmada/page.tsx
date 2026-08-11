@@ -12,20 +12,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/**
- * CITA CONFIRMADA.
- *
- * Existe como página con URL propia —y no como un cartel dentro del formulario— por una
- * razón práctica: **es lo que la gente enseña o guarda**. Con URL propia se puede añadir a
- * favoritos, mandar por WhatsApp a quien te acompaña o volver a abrir desde el historial
- * del navegador. Un mensaje dentro del formulario desaparece al recargar.
- *
- * Y por una razón técnica: tras confirmar se redirige aquí, así que recargar no vuelve a
- * enviar el formulario. Sin ese salto, un F5 en el móvil intenta reservar otra vez.
- *
- * La comprobación de propiedad la hace la consulta (ver `getUserAppointment`): con un id
- * de cita ajeno se responde 404, no la cita de otro.
- */
 export default async function BookingConfirmedPage({
   searchParams,
 }: {

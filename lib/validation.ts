@@ -1,23 +1,7 @@
 import { z } from 'zod'
 
-/**
- * LO QUE SE ACEPTA DE UN FORMULARIO, en un solo sitio.
- *
- * Los mismos esquemas los usan la acción de servidor y —cuando hace falta— el cliente.
- * La validación que cuenta es siempre la del servidor: la del navegador existe para
- * avisar antes, no para proteger nada.
- */
-
-/** Mínimo real, no simbólico. Ocho es lo que pide el consenso actual (NIST) y lo que
- *  aguanta el bcrypt de coste 12 sin que nadie note la espera. */
 const MIN_PASSWORD = 8
 
-/**
- * bcrypt sólo mira los **72 primeros bytes**. Aceptar más largo no da error pero engaña:
- * dos contraseñas que coincidan en los primeros 72 bytes serían la misma. Se corta aquí
- * y se dice, en vez de dejar que la gente crea que su frase de 90 caracteres cuenta
- * entera.
- */
 const MAX_PASSWORD = 72
 
 export const passwordSchema = z
@@ -32,11 +16,6 @@ export const emailSchema = z
   .email('Ese correo no parece completo.')
   .max(254, 'Ese correo es demasiado largo.')
 
-/**
- * Teléfono español, con o sin prefijo, con o sin espacios. Es opcional en el perfil pero
- * **obligatorio para reservar**: si alguien no aparece, la barbería llama; y si hay que
- * avisar de que el barbero está enfermo, llama. Un correo no sirve para eso.
- */
 export const phoneSchema = z
   .string()
   .trim()
@@ -48,9 +27,6 @@ export const nameSchema = z
   .min(2, 'Escribe tu nombre.')
   .max(60, 'Ese nombre es demasiado largo.')
 
-/** Lo que `authorize` recibe del formulario de acceso. Aquí NO se exige longitud mínima:
- *  quien tenga una contraseña antigua más corta debe poder entrar igual y cambiarla
- *  después. Las reglas de fuerza son para crear, no para comprobar. */
 export const credentialsSchema = z.object({
   email: emailSchema,
   password: z.string().min(1),
@@ -88,18 +64,11 @@ export const changePasswordSchema = z
 export const bookingSchema = z.object({
   serviceId: z.string().min(1, 'Elige un servicio.'),
   barberId: z.string().min(1, 'Elige con quién quieres cortarte.'),
-  /** `YYYY-MM-DD`. */
   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Elige un día.'),
-  /** `HH:MM` en 24 h. */
   time: z.string().regex(/^\d{2}:\d{2}$/, 'Elige una hora.'),
   notes: z.string().trim().max(300, 'La nota es demasiado larga.').optional(),
 })
 
-/**
- * Convierte los errores de zod en algo que un formulario pueda pintar: un mensaje por
- * campo, el primero de cada uno. Enseñar los tres errores de un mismo campo a la vez no
- * ayuda a nadie a corregirlo.
- */
 export function fieldErrors(error: z.ZodError): Record<string, string> {
   const result: Record<string, string> = {}
   for (const issue of error.issues) {

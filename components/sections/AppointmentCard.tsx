@@ -2,16 +2,6 @@ import { cancelAppointmentAction } from '@/app/(site)/cuenta/actions'
 import type { Appointment } from '@/lib/appointments'
 import { formatDay, formatDuration, formatPrice } from '@/lib/format'
 
-/**
- * UNA CITA, tal y como se ve en la cuenta.
- *
- * El orden de lectura está pensado para el vistazo de tres segundos que se le da a esto:
- * **día y hora primero, grandes**; después con quién y qué; y el precio al lado, que es lo
- * que hay que llevar suelto.
- *
- * `cancellable` sólo se pasa en las citas que están por venir. Una del historial no se
- * puede cancelar —ya ocurrió— y enseñar el botón desactivado sería peor que no enseñarlo.
- */
 export function AppointmentCard({
   appointment,
   cancellable = false,
@@ -50,11 +40,6 @@ export function AppointmentCard({
       {cancellable && !cancelled && (
         <form action={cancelAppointmentAction} className="mt-5">
           <input type="hidden" name="appointmentId" value={appointment.id} />
-          {/* Sin ventana de confirmación a propósito: un `confirm()` bloquea la pestaña
-              —y con las herramientas de automatización, la deja colgada— y en un móvil es
-              un diálogo del sistema que la gente acepta sin leer. Cancelar aquí no destruye
-              nada irrecuperable: la cita queda marcada, no borrada, y siempre se puede
-              volver a reservar el mismo hueco si nadie lo ha cogido. */}
           <button
             type="submit"
             className="link-underline tap eyebrow text-alert transition-opacity hover:opacity-80"

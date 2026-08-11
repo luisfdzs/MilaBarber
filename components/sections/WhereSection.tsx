@@ -7,20 +7,6 @@ import {
   WhatsAppIcon,
 } from '@/components/layout/NavIcons'
 
-/**
- * DÓNDE ESTAMOS Y CÓMO SE NOS LLAMA.
- *
- * Para un negocio de calle, ésta es la sección que más se usa después del botón de
- * reservar, y casi siempre desde un móvil y con prisa: alguien que ya viene de camino y
- * busca el número del portal, o que quiere avisar de que llega tarde. Por eso las cuatro
- * cosas son **enlaces que hacen algo al tocarlos** —abrir el mapa, llamar, abrir WhatsApp,
- * escribir— y no texto que haya que copiar.
- *
- * El mapa se enlaza, no se empotra. Un iframe de Google Maps son varios cientos de kB de
- * JavaScript de terceros, cookies de seguimiento en una web que no las necesita, y encima
- * en el móvil nadie lo usa: se toca y se abre la aplicación del mapa igual. El enlace hace
- * lo mismo gratis.
- */
 export function WhereSection() {
   const { address, contact, hours } = site
   const mapQuery = encodeURIComponent(

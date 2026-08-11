@@ -11,9 +11,6 @@ export function RequestResetForm() {
     emptyResetRequestState,
   )
 
-  // El mensaje es deliberadamente condicional —«si esa dirección tiene cuenta»— y sustituye
-  // al formulario en vez de acompañarlo: volver a enseñar el campo invita a probar otro
-  // correo, que es justo lo que no queremos facilitar.
   if (state.sent) {
     return (
       <p role="status" className="text-body text-bone">

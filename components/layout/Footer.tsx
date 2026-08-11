@@ -12,19 +12,8 @@ import {
 } from './NavIcons'
 import { Wordmark } from './Wordmark'
 
-/**
- * EL PIE es, para una barbería de barrio, la parte más útil de la web después del
- * botón de reservar: es donde la gente busca el teléfono, la dirección y si está
- * abierto ahora. Por eso las tres cosas van en texto plano y enlazadas —`tel:`,
- * `mailto:` y el mapa—, no dentro de una imagen ni detrás de un formulario.
- *
- * El horario se pinta desde `site.hours`, el mismo dato que usa el calendario de
- * reservas. Si un día cambia, cambia en los dos sitios a la vez o en ninguno.
- */
 export function Footer() {
   const { contact, address, hours, social } = site
-  /** Enlace al mapa. Se construye con la dirección, no con un identificador de Google:
-   *  así funciona igual en Android, en iPhone y en escritorio, y no caduca. */
   const mapQuery = encodeURIComponent(
     `${address.street}, ${address.postalCode} ${address.city}, ${address.region}`,
   )

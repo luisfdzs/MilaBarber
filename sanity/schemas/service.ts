@@ -1,16 +1,5 @@
 import { defineField, defineType } from 'sanity'
 
-/**
- * UN SERVICIO de la carta: corte, barba, mechas, cejas…
- *
- * Los tres campos que importan son nombre, **precio** y **duración**, y los tres son
- * obligatorios por el mismo motivo: el precio es lo primero que mira quien entra en la
- * web de una barbería, y la duración no es decorativa —es lo que usa el calendario para
- * saber cuántos huecos ocupa la cita—. Un servicio sin duración partiría la agenda.
- *
- * La descripción sí es opcional: «Arreglo de cejas, 2 €, 5 min» se explica solo, y
- * obligar a escribir una frase acaba produciendo relleno.
- */
 export const service = defineType({
   name: 'service',
   title: 'Servicio',
@@ -49,8 +38,6 @@ export const service = defineType({
       description:
         'Lo que ocupa en la agenda. El calendario reserva exactamente este tiempo, así que ' +
         'conviene que sea el real y no el optimista.',
-      // Múltiplos de 5: es la rejilla con la que trabaja el calendario de reservas.
-      // Aceptar 37 minutos obligaría a huecos que no encajan con ningún otro servicio.
       validation: (rule) => rule.required().min(5).max(300).integer(),
       initialValue: 30,
     }),

@@ -1,17 +1,5 @@
 import { defineField, defineType } from 'sanity'
 
-/**
- * UNA FOTO DE LA GALERÍA — un corte terminado, el local, un detalle del trabajo.
- *
- * Es el contenido que más va a crecer y el que más pesa en la decisión de quien mira:
- * en una barbería nadie lee la descripción de «desvanecido con degradado», mira la foto.
- * Por eso la galería es un tipo de documento propio y no un array dentro de otra cosa:
- * subir una foto tiene que ser abrir el panel en el móvil, elegir la imagen y publicar.
- *
- * El `alt` es obligatorio y no es burocracia: estas fotos son el contenido principal de
- * la página, y sin él la galería entera es un agujero para quien navega con lector de
- * pantalla y para Google.
- */
 export const galleryItem = defineType({
   name: 'galleryItem',
   title: 'Foto de galería',
