@@ -2,27 +2,6 @@ import { NextStudio } from 'next-sanity/studio'
 import config from '@/sanity.config'
 import { isSanityConfigured, projectId } from '@/sanity/env'
 
-/**
- * EL PANEL DE CONTENIDO, servido dentro de la propia web.
- *
- * La ruta es opcional-comodín (`[[...tool]]`) porque el panel navega por su cuenta:
- * `/admin`, `/admin/structure/service`, `/admin/vision`… Todas son la misma página de
- * Next; quien decide qué pintar es el propio Studio leyendo la URL.
- *
- * VA DENTRO DE LA WEB Y NO EN sanity.studio (que es gratis y no requiere desplegar nada)
- * por una razón práctica: la barbería tiene un sitio al que ir, el suyo, y `/admin` se
- * recuerda. Un dominio aparte es una cosa más que explicar, que apuntar y que perder.
- *
- * Y SI NO HAY PROYECTO DE SANITY, se dice qué falta en vez de enseñar un panel roto. Es la
- * misma decisión que en `sanity/env.ts` y en `lib/content.ts`: la web se despliega y
- * funciona con el contenido de partida antes de que exista el CMS, así que `/admin` va a
- * estar visitable durante ese rato y tiene que explicarse sola.
- */
-
-/**
- * El panel es una aplicación de cliente: no hay nada que prerrenderizar y todo lo que pinta
- * depende de con quién se entre. Sin esto, el build intentaría generarlo estáticamente.
- */
 export const dynamic = 'force-static'
 
 export default function AdminPage() {

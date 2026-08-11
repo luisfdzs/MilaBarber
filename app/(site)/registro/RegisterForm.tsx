@@ -51,8 +51,6 @@ export function RegisterForm() {
         label="Contraseña"
         name="password"
         type="password"
-        // `new-password` es lo que hace que el gestor del móvil ofrezca generar una y
-        // guardarla. Con `current-password` intentaría rellenar una que no existe.
         autoComplete="new-password"
         error={state.errors.password}
         hint="Ocho caracteres como mínimo."

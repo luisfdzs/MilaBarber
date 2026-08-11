@@ -1,19 +1,5 @@
 import { defineField, defineType } from 'sanity'
 
-/**
- * UN BARBERO.
- *
- * Es a la vez contenido y dato de operación, y por eso vive en el CMS y no en una tabla
- * de la base: la misma ficha que se enseña en la sección «Equipo» de la portada es la
- * que alimenta el desplegable de «con quién quieres cortarte» al reservar. Dos sitios,
- * un dato — si se corrigiera el nombre en uno y no en el otro, la confirmación de la
- * cita llamaría al barbero de otra manera que la web.
- *
- * `vacationFrom`/`vacationTo` no son un adorno: la aplicación anterior avisaba de las
- * vacaciones con una ventana emergente en cada entrada, y es información que la gente
- * necesita ANTES de intentar reservar. Aquí, además de avisar, el calendario deja de
- * ofrecer esos días.
- */
 export const barber = defineType({
   name: 'barber',
   title: 'Barbero',

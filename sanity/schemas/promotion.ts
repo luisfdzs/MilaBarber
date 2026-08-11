@@ -1,17 +1,5 @@
 import { defineField, defineType } from 'sanity'
 
-/**
- * UN AVISO: vacaciones, horario especial de Navidad, una oferta de vuelta al cole.
- *
- * Sustituye a las ventanas emergentes de la aplicación anterior, que aparecían al entrar
- * y había que cerrar una por una. Aquí el aviso vive **en la página**, en una banda bajo
- * la cabecera: se lee sin bloquear nada, no hay nada que cerrar y —lo importante— sigue
- * ahí cuando la persona vuelve, en vez de haberse gastado en el primer vistazo.
- *
- * Las fechas hacen que caduque solo. Es la diferencia entre un aviso y un problema: sin
- * `until`, el cartel de las vacaciones de agosto sigue puesto en octubre porque nadie se
- * acordó de quitarlo.
- */
 export const promotion = defineType({
   name: 'promotion',
   title: 'Aviso',

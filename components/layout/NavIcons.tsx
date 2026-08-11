@@ -1,16 +1,3 @@
-/**
- * LOS ICONOS, dibujados a mano y no traídos de una librería.
- *
- * Son diecisiete trazos: pesan menos que el `import` de cualquier paquete de
- * iconos y, sobre todo, se pueden ajustar. Todos comparten la misma rejilla de
- * 24, el mismo grosor de trazo y `currentColor`, que es lo que permite que el
- * mismo icono valga en la barra de móvil (hueso), en el pie (hueso apagado) y
- * activo (dorado) sin declarar tres versiones.
- *
- * `strokeWidth` 1.6 y no 2: a 24 px sobre negro, un trazo de 2 empasta los
- * dibujos con detalle —las tijeras, sin ir más lejos— y se leen como manchas.
- */
-
 type IconProps = { className?: string }
 
 function Icon({ className, children }: IconProps & { children: React.ReactNode }) {
@@ -41,7 +28,6 @@ export function HomeIcon(props: IconProps) {
   )
 }
 
-/** Tijeras de barbero: es el icono de «servicios» en cualquier barbería. */
 export function ScissorsIcon(props: IconProps) {
   return (
     <Icon {...props}>
@@ -142,12 +128,6 @@ export function ClockIcon(props: IconProps) {
   )
 }
 
-/**
- * Los tres logotipos de las redes van RELLENOS y no de trazo, al revés que el
- * resto. No es una incoherencia: son marcas ajenas y su forma reconocible es la
- * silueta maciza; dibujadas a línea se leen mal a 20 px y además dejan de
- * parecerse a sí mismas.
- */
 function BrandIcon({ className, children }: IconProps & { children: React.ReactNode }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">

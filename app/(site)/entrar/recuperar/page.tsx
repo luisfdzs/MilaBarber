@@ -23,9 +23,6 @@ export default function ResetRequestPage() {
           <RequestResetForm />
         </div>
 
-        {/* La salida de emergencia. Mientras el correo saliente no esté configurado —o si
-            un día falla— esto es lo único que separa a alguien de recuperar su cuenta, y
-            en una barbería de barrio llamar por teléfono funciona perfectamente. */}
         <p className="mt-8 text-center text-small text-bone-soft">
           ¿No te llega? Llámanos al{' '}
           <a href={`tel:${site.contact.phone}`} className="link-underline tap text-gold">

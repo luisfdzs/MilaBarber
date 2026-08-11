@@ -11,21 +11,6 @@ export const metadata: Metadata = {
   alternates: { canonical: '/galeria' },
 }
 
-/**
- * LA GALERÍA COMPLETA.
- *
- * Rejilla en mosaico, ordenada por fecha (lo más reciente arriba): en una barbería el
- * trabajo de hace dos años ya no representa a nadie, ni el estilo ni la mano.
- *
- * **Sin filtros por categoría**, aunque el CMS los guarde. Con doce o veinte fotos, cuatro
- * botones de filtro son más trabajo para quien mira que desplazarse; el campo está en el
- * panel para el día que haya cien, y ese día se añaden aquí. Hasta entonces, un filtro que
- * deja tres fotos es peor que no tenerlo.
- *
- * Cuando aún no hay fotos, se dice y se manda a Instagram, que es donde sí hay: dejar la
- * página en blanco haría pensar que está rota, y poner fotos de banco sería enseñar el
- * trabajo de otro.
- */
 export default async function GalleryPage() {
   const gallery = await getGallery()
 
@@ -64,9 +49,6 @@ export default async function GalleryPage() {
                   image={item.image}
                   sizes="(min-width: 48rem) 20rem, 45vw"
                   aspect="aspect-[4/5]"
-                  // Las seis primeras son las que entran en pantalla sin desplazarse en la
-                  // mayoría de tamaños. Marcar más no adelanta nada y compite por el ancho
-                  // de banda con las que sí se están viendo.
                   priority={index < 6}
                   quality={82}
                 />

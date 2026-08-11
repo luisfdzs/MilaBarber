@@ -16,23 +16,6 @@ import {
 import { getHeroMedia } from '@/lib/hero'
 import { href } from '@/lib/routes'
 
-/**
- * LA PORTADA.
- *
- * El orden de las secciones no es estético, es el orden en que se decide pedir cita:
- *
- *   1. **Aviso**, si lo hay. Antes que nada: si están cerrados dos semanas, todo lo demás
- *      sobra.
- *   2. **Hero.** Quiénes son y el botón de reservar, sin scroll.
- *   3. **Servicios destacados.** Cuánto cuesta y cuánto tarda, que es la primera pregunta.
- *   4. **Galería.** Cómo queda, que es lo que de verdad convence en una barbería.
- *   5. **Equipo.** Con quién, porque aquí se reserva con una persona.
- *   6. **Dónde estamos.** Ya decidido, cómo llegar.
- *
- * Las seis consultas van en un solo `Promise.all`: son independientes entre sí y
- * encadenarlas con seis `await` seguidos sumaría seis viajes a Sanity en vez de uno.
- */
-
 export default async function HomePage() {
   const [text, promotions, services, gallery, barbers] = await Promise.all([
     getBusinessText(),
@@ -75,18 +58,8 @@ export default async function HomePage() {
 
       <WhereSection />
 
-      {/* LA FICHA PARA GOOGLE. Es lo que hace que, al buscar «barbería Milagrosa
-          Pamplona», el resultado salga con el horario, la dirección y el teléfono en vez
-          de con dos líneas de texto suelto. Para un negocio de calle, esto vale más que
-          cualquier otra optimización de la web.
-
-          `Barbershop` es un tipo propio de schema.org, más preciso que `LocalBusiness`.
-          El horario se construye desde `site.hours`, el mismo dato que pinta el pie: si un
-          día cambia, cambia en los dos sitios a la vez. */}
       <script
         type="application/ld+json"
-        // Es la forma que documenta Next para JSON-LD. El contenido es nuestro y no lleva
-        // nada que venga de fuera.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd()) }}
       />
     </>

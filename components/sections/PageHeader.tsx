@@ -1,17 +1,5 @@
 import Link from 'next/link'
 
-/**
- * LA CABECERA DE UNA PÁGINA INTERIOR.
- *
- * Existe para que las páginas que no son la portada empiecen todas igual: rótulo pequeño,
- * título grande, una frase y —si la página tiene una acción evidente— un botón. Sin este
- * componente, cada página acaba inventando su propio arranque y el sitio deja de
- * reconocerse como uno solo.
- *
- * Lleva su propio espacio superior generoso porque **la cabecera del sitio es transparente
- * sobre el hero** y aquí no hay hero: sin ese aire, el título quedaría pegado bajo la
- * marca.
- */
 export function PageHeader({
   eyebrow,
   title,

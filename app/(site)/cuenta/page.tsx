@@ -12,25 +12,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/**
- * MI CUENTA.
- *
- * La pantalla equivalente en la aplicación anterior eran tres tarjetas —«hacer reserva»,
- * «mi perfil», «cerrar sesión»— y nada más: había que entrar en otra pantalla para saber
- * si tenías cita. Aquí **lo primero que se ve es la próxima cita**, porque es la única
- * razón por la que alguien entra en su cuenta en una barbería: comprobar el día y la hora,
- * o cancelarla.
- *
- * Las acciones quedan debajo, en su sitio, sin competir con el dato.
- */
 export default async function AccountPage({
   searchParams,
 }: {
   searchParams: Promise<{ bienvenida?: string }>
 }) {
   const [session, params] = await Promise.all([getSession(), searchParams])
-  // El layout ya ha hecho de guarda; aquí sólo se lee. El `!` no es opcional para
-  // TypeScript, que no sabe lo que garantizó el layout.
   const user = session!.user
   const { upcoming, past } = await getUserAppointments(user.id)
 
@@ -47,10 +34,6 @@ export default async function AccountPage({
       />
 
       <div className="page-gutter mx-auto max-w-3xl pb-(--spacing-section)">
-        {/* Para un barbero, la agenda del día es la única razón por la que entra aquí: va
-            arriba del todo y no abajo con «editar mis datos». El papel se lee del token,
-            que sólo decide qué se pinta; quien abra la agenda se encuentra con
-            `requireStaff`, que lo vuelve a comprobar contra la base. */}
         {STAFF_ROLES.includes(user.role) && (
           <p className="mb-10 text-center">
             <Link href="/cuenta/agenda" className="btn btn-gold">
@@ -111,9 +94,6 @@ export default async function AccountPage({
             Editar mis datos
           </Link>
 
-          {/* Cerrar sesión es un `<form>` con acción de servidor y no un enlace: cambia
-              estado en el servidor —borra la cookie— y eso no se hace con un GET, que
-              cualquier precarga del navegador podría disparar sola. */}
           <form action={signOutAction}>
             <button
               type="submit"

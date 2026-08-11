@@ -8,20 +8,11 @@ import { requireUser } from '@/lib/session'
 import { updatePassword, updateProfile, verifyCredentials } from '@/lib/users'
 import { changePasswordSchema, fieldErrors, profileSchema } from '@/lib/validation'
 
-/**
- * Cancelar una cita.
- *
- * El id del usuario **no viene del formulario**, viene de la sesión. Es la única forma de
- * que un id de cita ajeno —que se puede probar a mano— no cancele la cita de otra persona:
- * la consulta filtra por las dos cosas a la vez (ver `cancelAppointment`).
- */
 export async function cancelAppointmentAction(formData: FormData): Promise<void> {
   const user = await requireUser('/cuenta')
   const appointmentId = String(formData.get('appointmentId') ?? '')
 
   await cancelAppointment(appointmentId, user.id)
-  // Se revalida pase lo que pase: si no se canceló nada es porque la cita no era suya o ya
-  // estaba cancelada, y en los dos casos lo correcto es volver a pintar el estado real.
   revalidatePath('/cuenta')
 }
 
@@ -43,26 +34,11 @@ export async function updateProfileAction(
 
   await updateProfile(user.id, { name: parsed.data.name, phone: parsed.data.phone || null })
 
-  /**
-   * El nombre vive también en el token de sesión, que no se puede reescribir desde aquí:
-   * es una cookie firmada que sólo cambia al renovarse. En la práctica no se nota —el
-   * nombre sólo se usa como saludo— y a lo sumo tarda un día en ponerse al día
-   * (`updateAge` en `auth.ts`). Alternativas: forzar un cierre de sesión, que es peor
-   * remedio que la enfermedad, o mover las sesiones a base de datos, que el proveedor de
-   * credenciales no admite. Se deja escrito para que nadie lo tome por un fallo.
-   */
   revalidatePath('/cuenta/perfil')
   revalidatePath('/cuenta')
   return { errors: {}, saved: true }
 }
 
-/**
- * Cambiar la contraseña estando dentro.
- *
- * **Se pide la actual**, aunque haya sesión. No es burocracia: protege el caso real de un
- * móvil desbloqueado que se deja un momento encima de la mesa. Sin ese campo, cualquiera
- * que alcance el teléfono se queda con la cuenta en dos toques.
- */
 export async function changePasswordAction(
   _prev: PasswordState,
   formData: FormData,
