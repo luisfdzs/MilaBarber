@@ -6,18 +6,21 @@ type Props = {
 }
 
 export function Wordmark({ className, layout = 'inline' }: Props) {
+  // El logotipo de verdad de la barbería, tal cual: «MILA / BARBER» con la navaja debajo.
+  // Va de máscara y no de <img> para que siga tomando el color de donde se ponga —hueso
+  // sobre el vídeo de la portada, dorado si algún día hace falta— igual que hacía el dibujo
+  // a mano que había antes. El único máster que publica milabarberr.com son 256 px, así que
+  // no conviene pasarse de tamaño: a 2× ya se estaría inventando pixeles.
   if (layout === 'stacked') {
     return (
       <span
         className={cn(
-          'flex flex-col items-center leading-[0.85] font-display font-semibold uppercase',
+          'block aspect-square w-[2.1em] max-w-[13rem] bg-current [mask-image:url(/logo-mila-barber.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]',
           className,
         )}
-      >
-        <span className="text-[0.62em] tracking-[0.22em]">Mila</span>
-        <span className="text-[1em] tracking-[0.06em]">Barber</span>
-        <Razor className="mt-[0.12em] h-[0.16em] w-[0.9em] text-current opacity-80" />
-      </span>
+        role="img"
+        aria-label="Mila Barber"
+      />
     )
   }
 

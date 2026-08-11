@@ -13,6 +13,12 @@ const FADE = 1
 const SKIP = 1
 const SLOWDOWN = 1.35
 
+// Los reels vienen montados a base de cortes secos. Un plano que se lleva por delante uno de
+// esos cortes no se lee como un plano: se lee como que la portada se ha atascado y ha saltado.
+// Esto sólo avisa —el guion sigue siendo el nombre del fichero— porque decidir qué segundo es
+// el bueno es cosa de mirarlo, no de un umbral.
+const SCENE_THRESHOLD = 0.25
+
 const VARIANTS = [
   { name: 'wide', width: 1280, height: 720 },
   { name: 'tall', width: 720, height: 1280 },
@@ -50,6 +56,25 @@ for (const clip of clips) {
       (duration === null ? '' : ` de ${duration.toFixed(1)}`) +
       (short ? `  ⚠️  se queda corto: hacen falta ${NEEDED.toFixed(1)} s desde ahí` : ''),
   )
+
+  const cuts = await detectCuts(clip.file)
+  const inside = cuts.filter((t) => t > clip.start && t < clip.start + NEEDED)
+  if (inside.length > 0) {
+    console.log(
+      `      ⚠️  ${inside.length} corte(s) dentro del plano, en ${inside
+        .map((t) => t.toFixed(1))
+        .join(', ')}`,
+    )
+    const best = longestRun(cuts, duration ?? clip.start + NEEDED)
+    if (best.length >= NEEDED) {
+      console.log(`      → hay ${best.length.toFixed(1)} s seguidos a partir de @${best.start}`)
+    } else {
+      console.log(
+        `      → el tramo seguido más largo son ${best.length.toFixed(1)} s (@${best.start}), ` +
+          `menos de los ${NEEDED.toFixed(1)} s que hacen falta: este reel no da un plano`,
+      )
+    }
+  }
 }
 
 await mkdir(OUT_DIR, { recursive: true })
@@ -191,6 +216,43 @@ async function findClips() {
     if (error.code === 'ENOENT') return []
     throw error
   }
+}
+
+function detectCuts(file) {
+  return new Promise((resolve) => {
+    const child = spawn(FFMPEG, [
+      '-hide_banner',
+      '-loglevel',
+      'error',
+      '-i',
+      file,
+      '-filter_complex',
+      `select='gt(scene,${SCENE_THRESHOLD})',metadata=print:file=-`,
+      '-an',
+      '-f',
+      'null',
+      '-',
+    ])
+    let stdout = ''
+    child.stdout.on('data', (chunk) => (stdout += chunk))
+    child.on('error', () => resolve([]))
+    child.on('close', () => {
+      const times = [...stdout.matchAll(/pts_time:([\d.]+)/g)].map((m) => Number(m[1]))
+      resolve(times.filter((t) => Number.isFinite(t)).sort((a, b) => a - b))
+    })
+  })
+}
+
+function longestRun(cuts, duration) {
+  const marks = [0, ...cuts, duration]
+  let best = { start: 0, length: 0 }
+  for (let i = 1; i < marks.length; i += 1) {
+    // Un pelín por dentro del corte: el fotograma justo pegado al corte ya trae la imagen nueva.
+    const start = Math.ceil(marks[i - 1] + 0.5)
+    const length = marks[i] - start
+    if (length > best.length) best = { start, length }
+  }
+  return best
 }
 
 function probeDuration(file) {

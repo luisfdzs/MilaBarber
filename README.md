@@ -140,10 +140,10 @@ H.264 para Safari). Unos 15 MB en total. Cómo se reproduce está en
 `components/sections/HeroMontage.tsx`; cómo se genera, en `scripts/build-hero-montage.mjs`.
 
 **La materia prima son cinco reels del Instagram de la barbería**
-([@milabarber10](https://www.instagram.com/milabarber10)): el local con el techo de LED, el
-lavado en el lavacabezas, el peine sobre el pelo rizado, un blanco recién teñido y una
-órbita por la pared de producto. Los originales viven en `.hero-src/`, que está en
-`.gitignore` — al repositorio sólo va el resultado.
+([@milabarber10](https://www.instagram.com/milabarber10)): una órbita por el local que pasa
+por el rótulo de la pared, el lavado en el lavacabezas, el peine sobre el pelo rizado, un
+blanco recién teñido y una órbita por la pared de producto. Los originales viven en
+`.hero-src/`, que está en `.gitignore` — al repositorio sólo va el resultado.
 
 Para volver a montarlo: `npm run hero`. **ffmpeg no hace falta instalarlo**, lo trae el
 paquete `ffmpeg-static` con `npm install`.
@@ -154,7 +154,7 @@ El nombre del fichero es el guion, y por eso no hay ninguna lista de planos dent
 script:
 
 ```
-.hero-src/01-local-DBrs4yXOFuu@0.mp4     el número decide el orden
+.hero-src/01-local-DYMkejioVFW@41.mp4    el número decide el orden
 .hero-src/03-peine-DBrO86BOmHw@21.mp4    @21 = córtalo a partir del segundo 21
 .hero-src/descartados/                   material que no entra (las subcarpetas se ignoran)
 ```
@@ -164,12 +164,24 @@ unos diez segundos aprovechables y el resto es el cliente mirando a cámara —q
 titular queda fatal— o un rótulo. Cada plano se come unos 7 s de original; si el corte no
 llega, `npm run hero` lo avisa por consola con el nombre delante.
 
-Dos cosas que ya se pagaron eligiendo, y que conviene mirar antes de dar un plano por bueno:
+`npm run hero` también busca los cortes secos de cada reel y avisa de los que caen dentro del
+plano, con el tramo seguido más largo que ha encontrado y a partir de qué segundo empieza. Es
+sólo un aviso: el guion sigue siendo el nombre del fichero, porque qué segundo es el bueno se
+decide mirándolo. Hoy avisa de los planos 2, 3, 4 y 5 — están elegidos a mano y se ven bien,
+pero conviene saberlo antes de tocarlos.
 
-- **Barridos oscuros.** El plano del local empezaba en el segundo 6 y en el 8 hay un barrido
-  casi negro, que caía en el primer segundo del bucle: lo primero que se veía al entrar era
-  una pantalla vacía. Se arregló moviéndolo a `@0`, que además es el mejor fotograma de todo
-  el material. Mismo plano, otro segundo.
+Tres cosas que ya se pagaron eligiendo, y que conviene mirar antes de dar un plano por bueno:
+
+- **Cortes en cadena.** El primer plano era otro reel del local que parecía un plano y era una
+  recopilación de antes-y-después: doce cortes secos en catorce segundos, uno por segundo. Los
+  siete segundos que se lleva la portada se comían seis de esos cortes, y detrás del titular
+  eso no se lee como un montaje sino como que la web se ha quedado colgada y ha pegado un
+  salto. No tiene arreglo por recorte —el tramo seguido más largo era de 1,3 s— así que está
+  en `descartados/` y en su lugar va una órbita continua de doce segundos que además pasa por
+  el rótulo de **MILA BARBER** de la pared.
+- **Barridos oscuros.** Otro plano del local empezaba en el segundo 6 y en el 8 tenía un
+  barrido casi negro, que caía en el primer segundo del bucle: lo primero que se veía al
+  entrar era una pantalla vacía. Mismo plano, otro segundo.
 - **Marcas de agua.** El reel del degradado traía la de **CapCut** incrustada arriba, justo
   donde el degradado de la portada es más flojo. Ése no tiene arreglo por recorte y está en
   `descartados/`.
