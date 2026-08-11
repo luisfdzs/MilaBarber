@@ -8,23 +8,6 @@ import { formatDuration, formatPrice, formatShortDay } from '@/lib/format'
 import { emptyBookingState, type BookingState } from '@/lib/form-state'
 import { bookAction, getSlotsAction } from './actions'
 
-/**
- * EL FLUJO DE RESERVA: qué, con quién, qué día y a qué hora.
- *
- * **Los cuatro pasos están en la misma pantalla**, uno debajo de otro, y no en cuatro
- * pantallas con botón de «siguiente». En un móvil, cuatro pantallas encadenadas significa
- * que cambiar el servicio después de ver las horas obliga a retroceder tres veces y volver
- * a elegirlo todo; en una sola, se toca arriba y lo de abajo se recalcula. Es la queja
- * clásica de los calendarios de reserva y no cuesta nada evitarla.
- *
- * El orden importa y no es intercambiable: el servicio decide **cuánto dura**, y la
- * duración decide qué huecos caben. Por eso va primero y por eso al cambiarlo se olvida la
- * hora elegida —una hora que valía para un corte de 30 minutos puede no valer para una
- * permanente de dos horas—.
- *
- * Los huecos se piden al servidor y no se calculan aquí: son las citas de otras personas,
- * que este navegador no tiene por qué conocer más allá de «ocupado» o «libre».
- */
 export function BookingFlow({
   services,
   barbers,
@@ -43,31 +26,16 @@ export function BookingFlow({
   const [day, setDay] = useState(initial.day ?? days[0] ?? '')
   const [pickedTime, setPickedTime] = useState(initial.time ?? '')
 
-  /**
-   * Los huecos se guardan **junto a la selección que los produjo**, no sueltos. Es lo que
-   * permite que «¿tengo los huecos de lo que hay elegido ahora mismo?» sea una comparación
-   * y no un estado más que mantener sincronizado: al tocar el servicio, el barbero o el
-   * día, la clave deja de coincidir y la lista pasa a `null` —«buscando huecos»— en el
-   * mismo render, sin un efecto que lo borre después.
-   */
   const [loaded, setLoaded] = useState<{ key: string; slots: string[] } | null>(null)
   const [loadingSlots, startLoading] = useTransition()
 
   const slotsKey = `${serviceId}|${barberId}|${day}`
   const slots = loaded?.key === slotsKey ? loaded.slots : null
 
-  /**
-   * La hora elegida vale mientras siga estando entre los huecos que se ofrecen. Se deriva
-   * en vez de borrarse a mano al cambiar de día porque el motivo por el que deja de valer
-   * es siempre el mismo —ya no está en la lista— y así no hay ninguna combinación de pasos
-   * que deje marcada una hora que el servidor va a rechazar. De paso conserva la hora que
-   * venía en la URL al volver de la pantalla de acceso, si ese hueco sigue libre.
-   */
   const time = slots?.includes(pickedTime) ? pickedTime : ''
 
   const service = services.find((candidate) => candidate._id === serviceId)
 
-  /** Cada vez que cambia alguna de las tres cosas que determinan los huecos, se repiden. */
   useEffect(() => {
     if (!serviceId || !barberId || !day) return
     const key = `${serviceId}|${barberId}|${day}`
@@ -75,8 +43,6 @@ export function BookingFlow({
 
     startLoading(async () => {
       const result = await getSlotsAction(barberId, serviceId, day)
-      // La respuesta de una selección anterior puede llegar después de la de la actual: si
-      // eso pasa, pintaría los huecos del día equivocado. Se descarta.
       if (!cancelled) setLoaded({ key, slots: result })
     })
 
@@ -87,8 +53,6 @@ export function BookingFlow({
 
   return (
     <form action={action} className="flex flex-col gap-12">
-      {/* Lo que de verdad se envía. Los botones de arriba son la interfaz; esto es el
-          dato. Así el formulario funciona igual aunque el navegador no aplique el CSS. */}
       <input type="hidden" name="serviceId" value={serviceId} />
       <input type="hidden" name="barberId" value={barberId} />
       <input type="hidden" name="day" value={day} />
@@ -133,10 +97,6 @@ export function BookingFlow({
       </Step>
 
       <Step number={3} title="¿Qué día?" error={state.errors.day}>
-        {/* Tira horizontal y no un calendario de mes. En una barbería se reserva para esta
-            semana o la que viene: una rejilla de treinta casillas obliga a buscar el día
-            entre números, y en un móvil apenas caben. Los domingos no aparecen porque la
-            barbería cierra — no se pintan en gris, sencillamente no están. */}
         <ul className="flex snap-x gap-2 overflow-x-auto pb-2">
           {days.map((candidate) => (
             <li key={candidate} className="shrink-0 snap-start">
@@ -192,8 +152,6 @@ export function BookingFlow({
         />
       </div>
 
-      {/* El resumen antes del botón. Es lo que evita la cita del día equivocado: repite en
-          una frase legible lo que las cuatro rejillas dicen en forma de casillas marcadas. */}
       {service && time && (
         <p className="border border-gold/30 bg-gold/5 p-4 text-center text-body text-bone">
           {service.name}, el {formatShortDay(day)} a las {time}, con{' '}
@@ -238,12 +196,6 @@ function Step({
   )
 }
 
-/**
- * Una opción pulsable. Es un `<button type="button">` y no un `<input type="radio">`
- * disfrazado: el radio traería su propio comportamiento de teclado por grupo y aquí las
- * opciones se recorren en dos dimensiones. Lo que un radio sí aporta —decir a un lector de
- * pantalla que está marcado— se resuelve con `aria-pressed`.
- */
 function Choice({
   selected,
   onClick,

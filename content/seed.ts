@@ -1,27 +1,5 @@
 import type { Barber, BusinessText, Service } from '@/lib/content-types'
 
-/**
- * CONTENIDO DE PARTIDA.
- *
- * Está **transcrito literalmente de milabarberr.com** (la carta de servicios con sus
- * precios y duraciones, y los dos barberos que aparecen en los avisos de vacaciones de
- * la aplicación anterior). No hay nada inventado: es un negocio real y la web habla en
- * su nombre.
- *
- * Existe por dos motivos, y los dos son prácticos:
- *
- * 1. **La web funciona sin CMS.** Se puede desarrollar, revisar y hasta desplegar antes
- *    de crear el proyecto de Sanity. `lib/content.ts` pregunta al panel y, si no hay
- *    panel o está vacío, sirve esto.
- * 2. **Es el punto de partida del panel.** Cuando Sanity exista, estos mismos datos se
- *    cargan como documentos iniciales y la barbería edita desde ahí. En cuanto haya un
- *    documento publicado, esta copia deja de usarse.
- *
- * Ojo con la consecuencia de (1): mientras el CMS esté vacío, **cambiar un precio aquí
- * cambia el precio de la web**. En cuanto haya contenido publicado, este fichero se
- * queda de museo y editar aquí no hace nada.
- */
-
 export const seedServices: Service[] = [
   {
     _id: 'seed-corte',
@@ -105,12 +83,6 @@ export const seedServices: Service[] = [
   },
 ]
 
-/**
- * Los dos barberos. Los nombres salen de los avisos de la aplicación anterior; que sean
- * hermanos y que abrieran el local a finales de 2024 es información publicada por la
- * prensa local de Pamplona. **La presentación de cada uno la escriben ellos**: aquí no
- * se pone nada que no hayan dicho, así que `bio` va vacío hasta que llegue.
- */
 export const seedBarbers: Barber[] = [
   {
     _id: 'seed-hassan',
@@ -138,12 +110,6 @@ export const seedBarbers: Barber[] = [
   },
 ]
 
-/**
- * Los textos de la portada. El titular y la frase salen del rótulo que la barbería ya
- * usa —«Tu estilo, nuestra pasión»— partido en dos: la marca manda en grande y la frase
- * queda debajo. El bloque «La barbería» se deja vacío a propósito: cuenta la historia
- * del local y esa la tienen que contar ellos, no nosotros.
- */
 export const seedBusinessText: BusinessText = {
   heroHeadline: 'Tu estilo',
   heroLead: 'Nuestra pasión',

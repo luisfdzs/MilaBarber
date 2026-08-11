@@ -36,7 +36,7 @@ de datos es entrar, reservar y la agenda.
 | `npm run format` | Aplica Prettier |
 | `npm run db:setup` | Crea los índices de Mongo. Idempotente |
 | `npm run db:setup -- --admin correo@x.com` | Da papel de administrador a una cuenta ya registrada |
-| `npm run hero` | Renderiza el montaje de la portada (pide ffmpeg y el material en `.hero-src/`) |
+| `npm run hero` | Renderiza el montaje de la portada a partir del material de `.hero-src/` |
 
 ---
 
@@ -119,9 +119,6 @@ pinta, pero todo lo que toca datos ajenos lo comprueba otra vez contra la base
 
 ## Pendiente
 
-- **Vídeo de portada.** No hay `public/`: la portada se sirve con el fondo de la casa. Los
-  29 reels del Instagram son la materia prima de `npm run hero`, que pide ffmpeg y el
-  material en bruto en `.hero-src/`.
 - **Fotos del equipo.** Las fichas de Hassan y Mohammed siguen con el hueco tramado de
   `<Figure>`. Se suben desde `/admin`.
 - **Separar la base de datos de test y producción.** Hoy los dos entornos usan la misma
@@ -130,5 +127,50 @@ pinta, pero todo lo que toca datos ajenos lo comprueba otra vez contra la base
 - **Dominio.** `prod` sirve en `milabarber.vercel.app`. Migrar milabarberr.com es decisión
   del cliente.
 
-Ya resuelto: correo saliente por Gmail, webhooks de revalidación en los dos entornos, y la
-galería con trece fotos publicadas en Sanity (seis en la tira de la portada).
+Ya resuelto: correo saliente por Gmail, webhooks de revalidación en los dos entornos, la
+galería con trece fotos publicadas en Sanity (seis en la tira de la portada), y el vídeo de
+portada.
+
+---
+
+## El vídeo de portada
+
+`public/hero/` lleva el montaje ya renderizado: el bucle de veinte segundos que se ve detrás
+del titular, en dos proporciones (apaisada y vertical) y en dos formatos (VP9 para todos,
+H.264 para Safari). Unos 15 MB en total. Cómo se reproduce está en
+`components/sections/HeroMontage.tsx`; cómo se genera, en `scripts/build-hero-montage.mjs`.
+
+**La materia prima son cinco reels del Instagram de la barbería**
+([@milabarber10](https://www.instagram.com/milabarber10)): el local con el techo de LED, el
+lavado en el lavacabezas, el peine sobre el pelo rizado, un blanco recién teñido y una
+órbita por la pared de producto. Los originales viven en `.hero-src/`, que está en
+`.gitignore` — al repositorio sólo va el resultado.
+
+Para volver a montarlo: `npm run hero`. **ffmpeg no hace falta instalarlo**, lo trae el
+paquete `ffmpeg-static` con `npm install`.
+
+### Cómo se elige cada plano
+
+El nombre del fichero es el guion, y por eso no hay ninguna lista de planos dentro del
+script:
+
+```
+.hero-src/01-local-DBrs4yXOFuu@0.mp4     el número decide el orden
+.hero-src/03-peine-DBrO86BOmHw@21.mp4    @21 = córtalo a partir del segundo 21
+.hero-src/descartados/                   material que no entra (las subcarpetas se ignoran)
+```
+
+El `@` existe porque esto son reels, no planos rodados para una portada: de medio minuto hay
+unos diez segundos aprovechables y el resto es el cliente mirando a cámara —que detrás de un
+titular queda fatal— o un rótulo. Cada plano se come unos 7 s de original; si el corte no
+llega, `npm run hero` lo avisa por consola con el nombre delante.
+
+Dos cosas que ya se pagaron eligiendo, y que conviene mirar antes de dar un plano por bueno:
+
+- **Barridos oscuros.** El plano del local empezaba en el segundo 6 y en el 8 hay un barrido
+  casi negro, que caía en el primer segundo del bucle: lo primero que se veía al entrar era
+  una pantalla vacía. Se arregló moviéndolo a `@0`, que además es el mejor fotograma de todo
+  el material. Mismo plano, otro segundo.
+- **Marcas de agua.** El reel del degradado traía la de **CapCut** incrustada arriba, justo
+  donde el degradado de la portada es más flojo. Ése no tiene arreglo por recorte y está en
+  `descartados/`.

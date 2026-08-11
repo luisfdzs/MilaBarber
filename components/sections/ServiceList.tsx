@@ -3,26 +3,11 @@ import type { Service } from '@/lib/content-types'
 import { formatDuration, formatPrice } from '@/lib/format'
 import { href } from '@/lib/routes'
 
-/**
- * LA CARTA DE SERVICIOS.
- *
- * Es una **rejilla de tarjetas y no una tabla**, al revés que el catálogo del proyecto de
- * referencia. Allí la tabla era el argumento: catorce bobinas con cinco cotas cada una que
- * había que poder comparar columna a columna. Aquí son siete servicios con dos cifras, y
- * lo que se compara no es «cuál es más barato» sino «cuál es el mío». Una tabla obligaría
- * a leer las siete filas en orden; las tarjetas se escanean.
- *
- * Precio y duración se leen como un par y por eso van juntos, en la misma línea y con la
- * misma tipografía condensada: la pregunta real de quien reserva no es «cuánto cuesta»
- * sino «cuánto me cuesta y cuánto tardo».
- */
 export function ServiceList({
   services,
   bookable = true,
 }: {
   services: Service[]
-  /** En la portada las tarjetas llevan a reservar; en la página de servicios no, porque
-   *  el botón de reservar ya está arriba y repetirlo siete veces lo devalúa. */
   bookable?: boolean
 }) {
   return (

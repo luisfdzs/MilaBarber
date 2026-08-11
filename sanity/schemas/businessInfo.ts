@@ -1,17 +1,5 @@
 import { defineField, defineType } from 'sanity'
 
-/**
- * LOS TEXTOS DE LA PORTADA Y LA FICHA DEL NEGOCIO. Documento único.
- *
- * Aquí va lo que la barbería puede querer cambiar sin llamar a nadie —el titular del
- * hero, la presentación, el aviso de si se atiende sin cita— y **no** lo que es
- * estructural. El teléfono, la dirección y el horario viven en `content/site.ts`, en el
- * código: son datos que cambian una vez cada varios años, los usa también el pie de
- * página y el calendario de reservas, y tenerlos en dos sitios editables es la forma
- * segura de que un día no coincidan.
- *
- * Regla general del proyecto: **al CMS va lo que cambia; al código, lo que define.**
- */
 export const businessInfo = defineType({
   name: 'businessInfo',
   title: 'Textos de la web',

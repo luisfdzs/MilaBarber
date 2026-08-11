@@ -3,19 +3,6 @@ import type { Barber } from '@/lib/content-types'
 import { formatDay, parseIsoDay } from '@/lib/format'
 import { InstagramIcon } from '@/components/layout/NavIcons'
 
-/**
- * EL EQUIPO.
- *
- * En una barbería de barrio la gente no reserva «en Mila Barber», reserva «con Hassan» o
- * «con Mohammed»: es una relación con una persona, y por eso el equipo tiene sección
- * propia en la portada y no una línea en el pie.
- *
- * Aquí aparecen **todos**, también quien esté de vacaciones o de baja: seguir siendo del
- * equipo no depende de si hoy se le puede pedir cita. Lo que sí cambia es que se dice —y
- * se dice con la fecha de vuelta, que es el dato que la persona necesita para decidir si
- * espera o si prueba con el otro—. El calendario, que sí tiene que ofrecer sólo lo
- * reservable, usa otra consulta (`getBookableBarbers`).
- */
 export function TeamSection({ barbers }: { barbers: Barber[] }) {
   if (barbers.length === 0) return null
 
@@ -73,13 +60,6 @@ export function TeamSection({ barbers }: { barbers: Barber[] }) {
   )
 }
 
-/**
- * «De vacaciones hasta el 24 de agosto», o nada.
- *
- * Se pinta sólo si las vacaciones **incluyen hoy**. Un periodo que empieza dentro de tres
- * meses no es información útil en la portada: lo que hace falta saber es si hoy se puede
- * reservar con esta persona. Del futuro ya avisa el calendario, que no ofrece esos días.
- */
 function vacationLabel(barber: Barber): string | null {
   const { vacationFrom, vacationTo } = barber
   if (!vacationFrom || !vacationTo) return null

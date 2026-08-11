@@ -18,19 +18,6 @@ const schema = z
     message: 'Las dos contraseñas no coinciden.',
   })
 
-/**
- * GUARDAR LA CONTRASEÑA NUEVA.
- *
- * El token se consume aquí y no al abrir la página: si se gastara al abrir, cerrar la
- * pestaña sin llegar a enviar el formulario dejaría a la persona fuera y con el enlace ya
- * quemado. Se comprueba al abrir, se gasta al guardar.
- *
- * **No se inicia sesión automáticamente.** Es la única pantalla del sitio donde eso sería
- * un error: quien acaba de cambiar la contraseña porque sospecha que alguien la conocía
- * necesita comprobar que la nueva funciona, y el intento de entrar es esa comprobación.
- * Además el correo con el enlace pudo abrirlo cualquiera con acceso al buzón; que abrirlo
- * dé sesión directa convierte un buzón olvidado en una cuenta abierta.
- */
 export async function setNewPasswordAction(
   _prev: NewPasswordState,
   formData: FormData,

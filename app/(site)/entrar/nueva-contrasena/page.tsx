@@ -9,11 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/**
- * El token se comprueba al abrir para poder decir «este enlace ya no vale» **antes** de que
- * alguien escriba dos veces una contraseña nueva y la pierda al enviar. Se comprueba, no se
- * gasta: se gasta al guardar (ver `actions.ts`).
- */
 export default async function NewPasswordPage({
   searchParams,
 }: {

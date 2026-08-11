@@ -11,14 +11,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-/**
- * MIS DATOS.
- *
- * Se leen de la base y no de la sesión: el token de sesión se firmó al entrar y puede
- * llevar un nombre viejo si se cambió después (ver el comentario en `cuenta/actions.ts`).
- * Para pintar un formulario de edición hay que enseñar lo que hay guardado, no lo que
- * había cuando se abrió la sesión.
- */
 export default async function ProfilePage({
   searchParams,
 }: {
@@ -26,8 +18,6 @@ export default async function ProfilePage({
 }) {
   const [session, params] = await Promise.all([requireUser('/cuenta/perfil'), searchParams])
   const user = await findUserById(session.id)
-  // La sesión es válida pero el usuario ya no está en la base: cuenta borrada a mano
-  // mientras había una sesión abierta. Raro, pero un 404 es mejor que reventar.
   if (!user) notFound()
 
   return (
@@ -35,8 +25,6 @@ export default async function ProfilePage({
       <PageHeader eyebrow="Tu cuenta" title="Mis datos" />
 
       <div className="page-gutter mx-auto max-w-md pb-(--spacing-section)">
-        {/* Llega desde el flujo de reserva cuando la cuenta no tiene teléfono. Se explica
-            por qué se pide en lugar de plantar un campo obligatorio sin más. */}
         {params.falta === 'telefono' && (
           <p
             role="status"

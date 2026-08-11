@@ -6,23 +6,6 @@ import type { HeroMedia } from '@/lib/hero'
 import { href } from '@/lib/routes'
 import { HeroMontage } from './HeroMontage'
 
-/**
- * LA PORTADA, primera pantalla.
- *
- * `data-hero` no es decorativo: es lo que le dice a la cabecera que detrás hay fondo
- * oscuro a sangre y puede quedarse transparente hasta el primer scroll.
- *
- * `min-h-svh` y no `100vh`: en un móvil, `vh` cuenta la pantalla **sin** la barra del
- * navegador, así que el botón de reservar queda medio tapado hasta que se hace scroll
- * —justo el botón que no debe esconderse—. `svh` mide la ventana pequeña, la que hay
- * cuando la barra está desplegada, y por eso todo cabe desde el primer momento.
- *
- * Cuando no hay ni póster ni vídeo (ver `lib/hero.ts`), el fondo lo pone un degradado del
- * sistema. No se pinta un hueco tramado como en el resto de la web: aquí no hay nada que
- * reclamar al cliente —el negro es una decisión de diseño válida para una barbería— y un
- * placeholder a pantalla completa sería el mayor cartel de «esto está sin terminar» que
- * se puede poner en una web.
- */
 export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) {
   return (
     <section
@@ -39,11 +22,6 @@ export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) 
       )}
 
       <div className="page-gutter relative z-10 flex flex-col items-center text-center">
-        {/* La marca a tamaño grande, apilada como en el rótulo del local. Es un `<p>` y no
-            un titular: el <h1> de la página es la frase, no el nombre — que ya está en el
-            <title>, en la cabecera y en el pie. Repetirlo como encabezado de nivel uno le
-            dice a un lector de pantalla que el contenido de la portada es «Mila Barber»,
-            que no informa de nada. */}
         <p aria-hidden className="text-[clamp(3rem,14vw,7rem)] text-bone">
           <Wordmark layout="stacked" />
         </p>
@@ -62,8 +40,6 @@ export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) 
           </Link>
         </div>
 
-        {/* Las tres cosas que decide quien está mirando esto desde la calle: si abre hoy,
-            dónde está y si puede entrar sin cita. En una línea, pequeñas, bajo el botón. */}
         <p className="mt-8 text-small text-bone-soft">
           {site.hours.label} · {site.address.street}, {site.address.city}
         </p>
