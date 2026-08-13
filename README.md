@@ -134,16 +134,20 @@ portada.
 
 ## El vídeo de portada
 
-`public/hero/` lleva el montaje ya renderizado: el bucle de veinte segundos que se ve detrás
-del titular, en dos proporciones (apaisada y vertical) y en dos formatos (VP9 para todos,
-H.264 para Safari). Unos 15 MB en total. Cómo se reproduce está en
+`public/hero/` lleva el montaje ya renderizado: el bucle de dieciocho segundos que se ve
+detrás del titular, en dos proporciones (apaisada y vertical) y en dos formatos (VP9 para
+todos, H.264 para Safari). Unos 14 MB en total, de los que el navegador se baja uno solo
+(entre 2,7 y 3,9 MB según proporción y formato). Cómo se reproduce está en
 `components/sections/HeroMontage.tsx`; cómo se genera, en `scripts/build-hero-montage.mjs`.
 
-**La materia prima son cinco reels del Instagram de la barbería**
-([@milabarber10](https://www.instagram.com/milabarber10)): una órbita por el local que pasa
-por el rótulo de la pared, el lavado en el lavacabezas, el peine sobre el pelo rizado, un
-blanco recién teñido y una órbita por la pared de producto. Los originales viven en
-`.hero-src/`, que está en `.gitignore` — al repositorio sólo va el resultado.
+**La materia prima son ocho reels del Instagram de la barbería**
+([@milabarber10](https://www.instagram.com/milabarber10)), y en el bucle entran cuatro: el
+trozo de apertura con el corte y el cliente hablando a cámara, el peine sobre el pelo rizado,
+un blanco recién teñido y unas trenzas. Los otros cuatro —el lavado en el lavacabezas, una
+órbita por la pared de producto, un niño recién peinado y una nuca con un tatuaje de una
+rosa— están en `.hero-src/descartados/`, junto al material que no llegó a entrar. Los
+originales viven en `.hero-src/`, que está en `.gitignore` — al repositorio sólo va el
+resultado.
 
 Para volver a montarlo: `npm run hero`. **ffmpeg no hace falta instalarlo**, lo trae el
 paquete `ffmpeg-static` con `npm install`.
@@ -154,9 +158,12 @@ El nombre del fichero es el guion, y por eso no hay ninguna lista de planos dent
 script:
 
 ```
-.hero-src/01-local-DYMkejioVFW@41.mp4    el número decide el orden
-.hero-src/03-peine-DBrO86BOmHw@21.mp4    @21 = córtalo a partir del segundo 21
-.hero-src/descartados/                   material que no entra (las subcarpetas se ignoran)
+.hero-src/03-peine-DBrO86BOmHw@21.mp4       el número decide el orden
+                                            @21 = córtalo a partir del segundo 21
+.hero-src/01-local-DYMkejioVFW@0-7.28.mp4   @0-7.28 = enseña exactamente ese trozo
+.hero-src/08-trenzas-DUl7glXCGRc@1.4-4.5=5.mp4
+                                            =5 = y estíralo hasta llenar 5 s
+.hero-src/descartados/                      material que no entra (las subcarpetas se ignoran)
 ```
 
 El `@` existe porque esto son reels, no planos rodados para una portada: de medio minuto hay
@@ -164,24 +171,47 @@ unos diez segundos aprovechables y el resto es el cliente mirando a cámara —q
 titular queda fatal— o un rótulo. Cada plano se come unos 7 s de original; si el corte no
 llega, `npm run hero` lo avisa por consola con el nombre delante.
 
+**Un `@` con dos números es otra cosa**: `@0-7.28` no dice por dónde empezar sino qué trozo
+exacto se ve, y ese plano se lleva el hueco que necesite y va a velocidad natural, sin la
+cámara lenta del resto. Existe porque el trozo de apertura son 7,28 s que acaban justo cuando
+el cliente hace el gesto con el brazo: metido en el hueco de 5 s del resto de planos se
+quedaba a medias, y estirado o encogido dejaba de ser el trozo que se eligió. Un plano largo
+alarga el bucle; no desplaza el fundido de los que vienen detrás.
+
+**Y un `=` detrás es la excepción a eso**: `@1.4-4.5=5` son esos 3,1 s exactos puestos a
+llenar un hueco de cinco, o sea a 1,61× lento en vez del 1,35× del resto. Es para el reel al
+que no se le puede pedir más: cuando el trozo que sirve es más corto que el hueco, la única
+forma de que dé un plano de los largos es enseñarlo más despacio.
+
 `npm run hero` también busca los cortes secos de cada reel y avisa de los que caen dentro del
 plano, con el tramo seguido más largo que ha encontrado y a partir de qué segundo empieza. Es
 sólo un aviso: el guion sigue siendo el nombre del fichero, porque qué segundo es el bueno se
-decide mirándolo. Hoy avisa de los planos 2, 3, 4 y 5 — están elegidos a mano y se ven bien,
-pero conviene saberlo antes de tocarlos.
+decide mirándolo. Hoy avisa de los tres primeros y del de las trenzas no, que es el único con
+el plano elegido justo entre dos cortes; del blanco llega a decir que el reel no da un plano.
+Están elegidos a mano y se ven bien, pero conviene saberlo antes de tocarlos, y saber también
+que el detector no distingue un barrido de cámara de un corte: parte de esos avisos son
+barridos y hay que mirarlos igual.
 
-Tres cosas que ya se pagaron eligiendo, y que conviene mirar antes de dar un plano por bueno:
+Cuatro cosas que ya se pagaron eligiendo, y que conviene mirar antes de dar un plano por bueno:
 
 - **Cortes en cadena.** El primer plano era otro reel del local que parecía un plano y era una
   recopilación de antes-y-después: doce cortes secos en catorce segundos, uno por segundo. Los
   siete segundos que se lleva la portada se comían seis de esos cortes, y detrás del titular
   eso no se lee como un montaje sino como que la web se ha quedado colgada y ha pegado un
   salto. No tiene arreglo por recorte —el tramo seguido más largo era de 1,3 s— así que está
-  en `descartados/` y en su lugar va una órbita continua de doce segundos que además pasa por
-  el rótulo de **MILA BARBER** de la pared.
+  en `descartados/`, y el plano de apertura salió de otro reel del local.
 - **Barridos oscuros.** Otro plano del local empezaba en el segundo 6 y en el 8 tenía un
   barrido casi negro, que caía en el primer segundo del bucle: lo primero que se veía al
   entrar era una pantalla vacía. Mismo plano, otro segundo.
 - **Marcas de agua.** El reel del degradado traía la de **CapCut** incrustada arriba, justo
   donde el degradado de la portada es más flojo. Ése no tiene arreglo por recorte y está en
   `descartados/`.
+- **Pantallas partidas.** El reel de las trenzas está montado a base de zooms de golpe, y en
+  los primeros cinco segundos la pantalla está partida en tres bandas con tres planos distintos
+  a la vez. A pantalla completa lo más largo que le queda son 2,2 s, y ése fue su plano durante
+  un tiempo: con el fundido de entrada comiéndose 1 s del hueco, no se veía. **Su plano son
+  ahora las bandas**, que es su único tramo largo: de 1,4 a 4,5 —antes de 1,4 la banda de abajo
+  todavía está en negro y en 4,6 entra un corte— estirados al hueco de 5 s (`@1.4-4.5=5`).
+  Ojo: **eso sólo se ve en vertical**. El recorte a 16:9 de la variante apaisada se queda con la
+  banda del medio y las otras dos se van fuera, así que en escritorio ese plano se lee como un
+  plano normal de una nuca.

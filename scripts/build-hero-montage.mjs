@@ -44,34 +44,37 @@ if (!(await hasFfmpeg())) {
   process.exit(1)
 }
 
-const NEEDED = SEGMENT * SLOWDOWN
-
 console.log(`${clips.length} plano(s) en ${SRC_DIR}/:`)
 for (const clip of clips) {
   const name = path.basename(clip.file)
   const duration = await probeDuration(clip.file)
-  const short = duration !== null && clip.start + NEEDED > duration
+  const needed = clip.source
+  const short = duration !== null && clip.start + needed > duration
   console.log(
     `  · ${name} — desde el segundo ${clip.start}` +
       (duration === null ? '' : ` de ${duration.toFixed(1)}`) +
-      (short ? `  ⚠️  se queda corto: hacen falta ${NEEDED.toFixed(1)} s desde ahí` : ''),
+      (clip.span === SEGMENT ? '' : `, hueco propio de ${clip.span.toFixed(2)} s`) +
+      (clip.stretched
+        ? `, ${needed.toFixed(1)} s estirados a ${clip.span.toFixed(1)} (×${clip.slowdown.toFixed(2)})`
+        : '') +
+      (short ? `  ⚠️  se queda corto: hacen falta ${needed.toFixed(1)} s desde ahí` : ''),
   )
 
   const cuts = await detectCuts(clip.file)
-  const inside = cuts.filter((t) => t > clip.start && t < clip.start + NEEDED)
+  const inside = cuts.filter((t) => t > clip.start && t < clip.start + needed)
   if (inside.length > 0) {
     console.log(
       `      ⚠️  ${inside.length} corte(s) dentro del plano, en ${inside
         .map((t) => t.toFixed(1))
         .join(', ')}`,
     )
-    const best = longestRun(cuts, duration ?? clip.start + NEEDED)
-    if (best.length >= NEEDED) {
+    const best = longestRun(cuts, duration ?? clip.start + needed)
+    if (best.length >= needed) {
       console.log(`      → hay ${best.length.toFixed(1)} s seguidos a partir de @${best.start}`)
     } else {
       console.log(
         `      → el tramo seguido más largo son ${best.length.toFixed(1)} s (@${best.start}), ` +
-          `menos de los ${NEEDED.toFixed(1)} s que hacen falta: este reel no da un plano`,
+          `menos de los ${needed.toFixed(1)} s que hacen falta: este reel no da un plano`,
       )
     }
   }
@@ -164,12 +167,13 @@ function buildFilter(width, height) {
   const order = [...clips.map((_, i) => i), 0]
 
   const parts = order.map((clipIndex, position) => {
-    const skip = clips[clipIndex].start
-    const start = position === order.length - 1 ? skip + SEGMENT / 2 : skip
+    const clip = clips[clipIndex]
+    // El último no se ve: el `-t` corta justo donde empieza su fundido. Está para que la cadena
+    // de xfade cierre, así que se repite el plano 0 tal cual en vez de buscarle otro segundo.
     return (
       `[${clipIndex}:v]` +
-      `trim=start=${start}:duration=${(SEGMENT * SLOWDOWN).toFixed(3)},` +
-      `setpts=${SLOWDOWN}*(PTS-STARTPTS),` +
+      `trim=start=${clip.start}:duration=${clip.source.toFixed(3)},` +
+      `setpts=${clip.slowdown}*(PTS-STARTPTS),` +
       `fps=25,` +
       `scale=${width}:${height}:force_original_aspect_ratio=increase,` +
       `crop=${width}:${height},` +
@@ -180,18 +184,25 @@ function buildFilter(width, height) {
     )
   })
 
+  // Cada plano entra donde el anterior empieza a irse, así que el hueco de uno no arrastra a los
+  // demás: un plano largo alarga el bucle, no desplaza el fundido de los que vienen detrás.
   let previous = '[v0]'
+  let offset = 0
   for (let i = 1; i < order.length; i += 1) {
-    const offset = (i * (SEGMENT - FADE)).toFixed(3)
+    offset += clips[order[i - 1]].span - FADE
     const label = i === order.length - 1 ? '[out]' : `[x${i}]`
-    parts.push(`${previous}[v${i}]xfade=transition=fade:duration=${FADE}:offset=${offset}${label}`)
+    parts.push(
+      `${previous}[v${i}]xfade=transition=fade:duration=${FADE}:offset=${offset.toFixed(3)}${label}`,
+    )
     previous = label
   }
 
   return {
     filter: parts.join(';'),
     output: '[out]',
-    duration: Number((clips.length * (SEGMENT - FADE)).toFixed(3)),
+    // El bucle acaba justo donde arrancaría el fundido del plano de más: ahí la imagen es la misma
+    // que en el segundo 0, y por eso el `loop` del <video> no da un salto.
+    duration: Number(offset.toFixed(3)),
   }
 }
 
@@ -206,16 +217,37 @@ async function findClips() {
       .map((entry) => {
         const marked = path
           .basename(entry.name, path.extname(entry.name))
-          .match(/@(\d+(?:[.,]\d+)?)$/)
+          .match(/@(\d+(?:[.,]\d+)?)(?:-(\d+(?:[.,]\d+)?))?(?:=(\d+(?:[.,]\d+)?))?$/)
+        const start = marked ? number(marked[1]) : SKIP
+        const end = marked && marked[2] !== undefined ? number(marked[2]) : null
+        const slot = marked && marked[3] !== undefined ? number(marked[3]) : null
+
+        // `@12` es «un plano de los de siempre a partir del segundo 12»: hueco de SEGMENT y cámara
+        // lenta. `@0-7.28` es «este trozo exacto, entero»: se lleva el hueco que haga falta y va a
+        // velocidad natural, porque estirarlo sería enseñar otra cosa. `@5-7=5` es ese mismo trozo
+        // exacto pero puesto a llenar un hueco de 5 s: la cámara lenta sale de la división, no de
+        // SLOWDOWN, y es la única forma de que un reel de cortes secos dé un plano de los largos.
+        const exact = end !== null
+        const source = exact ? end - start : (slot ?? SEGMENT) * SLOWDOWN
+        const span = slot ?? (exact ? source : SEGMENT)
+
         return {
           file: path.join(SRC_DIR, entry.name),
-          start: marked ? Number(marked[1].replace(',', '.')) : SKIP,
+          start,
+          span,
+          slowdown: exact ? span / source : SLOWDOWN,
+          stretched: exact && slot !== null,
+          source,
         }
       })
   } catch (error) {
     if (error.code === 'ENOENT') return []
     throw error
   }
+}
+
+function number(text) {
+  return Number(text.replace(',', '.'))
 }
 
 function detectCuts(file) {
