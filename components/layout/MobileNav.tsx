@@ -17,6 +17,7 @@ import {
   WhatsAppIcon,
   YouTubeIcon,
 } from './NavIcons'
+import { SectionLink } from './SectionLink'
 
 export function MobileNav({ signedIn }: { signedIn: boolean }) {
   const pathname = usePathname()
@@ -56,14 +57,20 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
         >
           {navigation.map((key) => {
             const target = href(key)
-            const active = !isSection(key) && onRoute(target)
-            return (
+            const section = isSection(key)
+            const active = !section && onRoute(target)
+            const className = cn('font-display text-title', active ? 'text-gold' : 'text-bone')
+            return section ? (
+              <SectionLink key={key} href={target} onClick={close} className={className}>
+                {routes[key].label}
+              </SectionLink>
+            ) : (
               <Link
                 key={key}
                 href={target}
                 aria-current={active ? 'page' : undefined}
                 onClick={close}
-                className={cn('font-display text-title', active ? 'text-gold' : 'text-bone')}
+                className={className}
               >
                 {routes[key].label}
               </Link>

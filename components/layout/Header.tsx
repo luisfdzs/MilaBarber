@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { cn } from '@/lib/cn'
 import { href, isSection, navigation, routes } from '@/lib/routes'
 import { UserIcon } from './NavIcons'
+import { SectionLink } from './SectionLink'
 import { Wordmark } from './Wordmark'
 
 type Props = {
@@ -34,6 +35,13 @@ export function Header({ signedIn }: Props) {
     >
       <a
         href="#main"
+        onClick={(event) => {
+          const main = document.getElementById('main')
+          if (!main) return
+          event.preventDefault()
+          main.focus()
+          main.scrollIntoView({ behavior: 'auto', block: 'start' })
+        }}
         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-gold focus:px-3 focus:py-2 focus:text-night"
       >
         Saltar al contenido
@@ -57,17 +65,22 @@ export function Header({ signedIn }: Props) {
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Principal">
           {navigation.map((key) => {
             const target = href(key)
-            const active =
-              !isSection(key) && (pathname === target || pathname.startsWith(`${target}/`))
-            return (
+            const section = isSection(key)
+            const active = !section && (pathname === target || pathname.startsWith(`${target}/`))
+            const className = cn(
+              'link-underline tap font-display text-micro tracking-[0.18em] uppercase transition-opacity',
+              active ? 'text-gold opacity-100' : 'opacity-70 hover:opacity-100',
+            )
+            return section ? (
+              <SectionLink key={key} href={target} className={className}>
+                {routes[key].label}
+              </SectionLink>
+            ) : (
               <Link
                 key={key}
                 href={target}
                 aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'link-underline tap font-display text-micro tracking-[0.18em] uppercase transition-opacity',
-                  active ? 'text-gold opacity-100' : 'opacity-70 hover:opacity-100',
-                )}
+                className={className}
               >
                 {routes[key].label}
               </Link>
