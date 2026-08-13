@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Wordmark } from '@/components/layout/Wordmark'
 import { site } from '@/content/site'
 import type { BusinessText } from '@/lib/content-types'
 import type { HeroMedia } from '@/lib/hero'
@@ -22,11 +21,7 @@ export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) 
       )}
 
       <div className="page-gutter relative z-10 flex flex-col items-center text-center">
-        <p aria-hidden className="text-[clamp(3rem,14vw,7rem)] text-bone">
-          <Wordmark layout="stacked" />
-        </p>
-
-        <h1 className="mt-8 max-w-3xl font-display text-title text-bone">
+        <h1 className="max-w-3xl font-display text-title text-bone">
           {text.heroHeadline}
           {text.heroLead && <span className="block text-gold">{text.heroLead}</span>}
         </h1>

@@ -51,7 +51,7 @@ export function Header({ signedIn }: Props) {
             }
           }}
         >
-          <Wordmark className="text-[0.95rem] md:text-[1.1rem]" />
+          <Wordmark className="text-[1.6rem] md:text-[1.9rem]" />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Principal">

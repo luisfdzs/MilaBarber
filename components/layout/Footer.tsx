@@ -23,7 +23,7 @@ export function Footer() {
       <div className="page-gutter mx-auto max-w-6xl py-(--spacing-section)">
         <div className="flex flex-col items-center gap-12 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
           <div className="flex flex-col items-center gap-4 lg:items-start">
-            <Wordmark className="text-[1.4rem]" />
+            <Wordmark className="text-[2rem]" />
             <p className="text-small text-bone-soft">{site.tagline}</p>
           </div>
 

@@ -22,7 +22,7 @@ export default async function SignInPage({
 
   return (
     <div className="page-gutter mx-auto flex max-w-md flex-col items-center py-16 md:py-24">
-      <Wordmark layout="stacked" className="text-[3.5rem] text-bone" />
+      <Wordmark className="text-[3.5rem] text-bone" />
 
       {alreadyRegistered && (
         <p

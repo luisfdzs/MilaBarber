@@ -16,7 +16,7 @@ export default async function RegisterPage() {
 
   return (
     <div className="page-gutter mx-auto flex max-w-md flex-col items-center py-16 md:py-24">
-      <Wordmark layout="stacked" className="text-[3rem] text-bone" />
+      <Wordmark className="text-[3rem] text-bone" />
 
       <div className="mt-12 w-full border border-line bg-coal p-8">
         <h1 className="font-display text-[1.5rem] tracking-wide text-bone">Crear cuenta</h1>
