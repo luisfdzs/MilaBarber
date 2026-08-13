@@ -1,8 +1,7 @@
-import Link from 'next/link'
 import { site } from '@/content/site'
 import type { BusinessText } from '@/lib/content-types'
 import type { HeroMedia } from '@/lib/hero'
-import { href } from '@/lib/routes'
+import { HeroActions } from './HeroActions'
 import { HeroMontage } from './HeroMontage'
 
 export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) {
@@ -26,13 +25,8 @@ export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) 
           {text.heroLead && <span className="block text-gold">{text.heroLead}</span>}
         </h1>
 
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-          <Link href={href('book')} className="btn btn-gold">
-            Reservar cita
-          </Link>
-          <Link href={href('services')} className="btn btn-ghost">
-            Ver servicios y precios
-          </Link>
+        <div className="mt-10">
+          <HeroActions />
         </div>
 
         <p className="mt-8 text-small text-bone-soft">
