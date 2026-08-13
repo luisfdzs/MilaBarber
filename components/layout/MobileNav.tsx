@@ -146,15 +146,14 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
           <ScissorsIcon className="h-6 w-6" />
         </NavSlot>
 
-        <Link
+        <NavSlot
           href={href('book')}
-          aria-label={routes.book.label}
-          aria-current={onRoute(href('book')) ? 'page' : undefined}
+          label={routes.book.label}
+          active={onRoute(href('book'))}
           onClick={close}
-          className={cn(slotClass, 'bg-gold text-night')}
         >
           <CalendarIcon className="h-6 w-6" />
-        </Link>
+        </NavSlot>
 
         <NavSlot
           href={href('gallery')}
@@ -183,7 +182,7 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
 const slotClass =
   'relative flex flex-1 flex-col items-center justify-center transition-colors duration-500'
 
-const slotState = (active: boolean) => (active ? 'bg-gold/12 text-gold' : 'text-bone opacity-60')
+const slotState = (active: boolean) => (active ? 'bg-gold text-night' : 'text-bone opacity-60')
 
 function NavSlot({
   href: target,
