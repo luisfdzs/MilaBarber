@@ -22,14 +22,26 @@ export const galleryItem = defineType({
       ],
     }),
     defineField({
+      name: 'video',
+      title: 'Vídeo',
+      type: 'file',
+      options: { accept: 'video/mp4' },
+      description:
+        'Opcional. Si lo rellenas, la foto pasa a ser la portada del vídeo y la ficha va a la ' +
+        'sección «Vídeos».',
+    }),
+    defineField({
       name: 'category',
-      title: 'Categoría',
+      title: 'Sección',
       type: 'string',
       options: {
         list: [
-          { title: 'Corte', value: 'corte' },
+          { title: 'Cortes', value: 'corte' },
+          { title: 'Peinados', value: 'peinado' },
+          { title: 'Trenzas', value: 'trenzas' },
           { title: 'Barba', value: 'barba' },
-          { title: 'Color', value: 'color' },
+          { title: 'Color y mechas', value: 'color' },
+          { title: 'Vídeos', value: 'video' },
           { title: 'El local', value: 'local' },
         ],
         layout: 'radio',

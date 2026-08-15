@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { isHomePath } from '@/lib/routes'
 
 type Props = {
   href: string
@@ -16,8 +17,7 @@ export function SectionLink({ href, className, children, onClick, ...rest }: Pro
   const pathname = usePathname()
   const router = useRouter()
 
-  const [path, id] = href.split('#')
-  const base = path || '/'
+  const id = href.slice(1)
 
   return (
     <Link
@@ -25,7 +25,6 @@ export function SectionLink({ href, className, children, onClick, ...rest }: Pro
       className={className}
       onClick={(event) => {
         if (
-          !id ||
           event.button !== 0 ||
           event.metaKey ||
           event.ctrlKey ||
@@ -36,12 +35,12 @@ export function SectionLink({ href, className, children, onClick, ...rest }: Pro
         }
         event.preventDefault()
         onClick?.()
-        if (pathname === base) {
-          scrollToSection(id, 'auto')
+        if (isHomePath(pathname)) {
+          window.history.replaceState(null, '', href)
+          scrollToSection(id, 'smooth')
           return
         }
-        router.push(base, { scroll: false })
-        waitForSection(id)
+        router.push(href)
       }}
       {...rest}
     >
@@ -55,13 +54,4 @@ function scrollToSection(id: string, behavior: ScrollBehavior): boolean {
   if (!target) return false
   target.scrollIntoView({ behavior, block: 'start' })
   return true
-}
-
-function waitForSection(id: string) {
-  const start = Date.now()
-  const tick = () => {
-    if (scrollToSection(id, 'instant')) return
-    if (Date.now() - start < 2000) setTimeout(tick, 50)
-  }
-  setTimeout(tick, 0)
 }

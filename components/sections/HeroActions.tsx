@@ -5,14 +5,14 @@ import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/cn'
 import { href, type RouteKey } from '@/lib/routes'
 
-const options: { key: RouteKey; label: string; icon: string }[] = [
-  { key: 'book', label: 'Reservar cita', icon: '/icons/calendar-check.svg' },
-  { key: 'services', label: 'Ver servicios y precios', icon: '/icons/scissors.svg' },
-  { key: 'gallery', label: 'Ver galería', icon: '/icons/images.svg' },
+const options: { key: RouteKey; label: string; icon: string; angle: number }[] = [
+  { key: 'services', label: 'Ver servicios y precios', icon: '/icons/scissors.svg', angle: -62 },
+  { key: 'book', label: 'Reservar cita', icon: '/icons/calendar-check.svg', angle: 0 },
+  { key: 'gallery', label: 'Ver galería', icon: '/icons/images.svg', angle: 62 },
 ]
 
-const GAP = 0.6
-const STEP = 3.4
+const RADIUS = 4.6
+const PIVOT = 1.75
 
 export function HeroActions() {
   const [open, setOpen] = useState(false)
@@ -40,10 +40,10 @@ export function HeroActions() {
         <defs>
           <filter
             id="hero-goo"
-            x="-40%"
-            y="-40%"
-            width="180%"
-            height="180%"
+            x="-60%"
+            y="-60%"
+            width="220%"
+            height="220%"
             colorInterpolationFilters="sRGB"
           >
             <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
@@ -58,35 +58,38 @@ export function HeroActions() {
         </defs>
       </svg>
 
-      <div
-        className="relative flex flex-col items-center"
-        style={{ filter: 'url(#hero-goo)' }}
-      >
+      <div className="relative flex flex-col items-center" style={{ filter: 'url(#hero-goo)' }}>
         <div
           id="hero-actions"
           inert={!open}
-          className="pointer-events-none absolute top-0 left-1/2 h-0 w-max"
+          className="pointer-events-none absolute top-0 left-1/2 h-0 w-0"
         >
-          {options.map((option, index) => (
-            <Link
-              key={option.key}
-              href={href(option.key)}
-              onClick={() => setOpen(false)}
-              className={cn(
-                'btn btn-gold absolute bottom-0 left-0 whitespace-nowrap transition-[transform,opacity] duration-400 ease-out-soft motion-reduce:transition-none',
-                open ? 'pointer-events-auto opacity-100' : 'opacity-0',
-              )}
-              style={{
-                transform: open
-                  ? `translate(-50%, -${GAP + index * STEP}rem) scale(1)`
-                  : 'translate(-50%, 0) scale(0.6)',
-                transitionDelay: `${(open ? index : options.length - 1 - index) * 60}ms`,
-              }}
-            >
-              <Icon src={option.icon} />
-              {option.label}
-            </Link>
-          ))}
+          {options.map((option, index) => {
+            const radians = (option.angle * Math.PI) / 180
+            const x = RADIUS * Math.sin(radians)
+            const y = RADIUS * Math.cos(radians)
+            return (
+              <Link
+                key={option.key}
+                href={href(option.key)}
+                aria-label={option.label}
+                title={option.label}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'absolute top-0 left-0 grid size-12 place-items-center rounded-full bg-bone text-night transition-[transform,opacity] duration-400 ease-out-soft hover:bg-gold motion-reduce:transition-none',
+                  open ? 'pointer-events-auto opacity-100' : 'opacity-0',
+                )}
+                style={{
+                  transform: open
+                    ? `translate(calc(-50% + ${x.toFixed(3)}rem), calc(-50% + ${(PIVOT - y).toFixed(3)}rem)) scale(1)`
+                    : `translate(-50%, calc(-50% + ${PIVOT}rem)) scale(0.6)`,
+                  transitionDelay: `${(open ? index : options.length - 1 - index) * 60}ms`,
+                }}
+              >
+                <Icon src={option.icon} className="size-6" />
+              </Link>
+            )
+          })}
         </div>
 
         <button
@@ -94,16 +97,16 @@ export function HeroActions() {
           onClick={() => setOpen(!open)}
           aria-expanded={open}
           aria-controls="hero-actions"
-          className="btn btn-gold relative"
+          aria-label={open ? 'Cerrar las opciones' : 'Empieza aquí'}
+          className="relative grid size-14 place-items-center rounded-full bg-bone text-night transition-colors duration-350 ease-out-soft hover:bg-gold"
         >
           <Icon
             src="/icons/plus.svg"
             className={cn(
-              'transition-transform duration-400 ease-out-soft motion-reduce:transition-none',
+              'size-7 transition-transform duration-400 ease-out-soft motion-reduce:transition-none',
               open && 'rotate-45',
             )}
           />
-          Empieza aquí
         </button>
       </div>
     </div>
@@ -114,7 +117,7 @@ function Icon({ src, className }: { src: string; className?: string }) {
   return (
     <span
       aria-hidden
-      className={cn('block h-[1.15em] w-[1.15em] shrink-0 bg-current', className)}
+      className={cn('block shrink-0 bg-current', className)}
       style={{
         maskImage: `url(${src})`,
         maskSize: 'contain',

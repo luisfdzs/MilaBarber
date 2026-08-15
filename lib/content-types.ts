@@ -38,10 +38,33 @@ export const barberSchema = z.object({
 
 export type Barber = z.infer<typeof barberSchema>
 
+export const galleryCategories = [
+  'corte',
+  'peinado',
+  'trenzas',
+  'barba',
+  'color',
+  'video',
+  'local',
+] as const
+
+export type GalleryCategory = (typeof galleryCategories)[number]
+
+export const galleryCategoryLabels: Record<GalleryCategory, string> = {
+  corte: 'Cortes',
+  peinado: 'Peinados',
+  trenzas: 'Trenzas',
+  barba: 'Barba',
+  color: 'Color y mechas',
+  video: 'Vídeos',
+  local: 'El local',
+}
+
 export const galleryItemSchema = z.object({
   _id: z.string(),
   image: imageSchema,
-  category: z.enum(['corte', 'barba', 'color', 'local']),
+  video: z.string().url().nullable().default(null),
+  category: z.enum(galleryCategories),
   barberName: z.string().nullable().default(null),
   featured: z.boolean().default(false),
   publishedAt: z.string(),

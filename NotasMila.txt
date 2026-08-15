@@ -1,0 +1,13 @@
+1. En el hero principal, en el primer vídeo solo quiero quedarme con la parte del chico haciendo el gesto con los brazos. Desde que se le vé sentado en la silla hasta que se gira, mira a cámara y hace el gesto de los brazos. Solo quiero ese fragmento. Además, no quiero ponerlo al principio sino al final. Al principio lo que quiero es el vídeo del chico de las trenzas.
+
+2. El botón del hero que despliega otros tres botones, quiero que solo se muestren los iconos y quitar el texto. Quiero que sean todos de color blanco. Quiero también que los botones que se aparecen no lo hagan en vertical sino rodeando al botón principal. Uno encima recto, otro hacia arriba a la derecha, y otro hacia arriba a la izquierda, formando un arco.
+
+3. Quiero que la siguiente sección al hero sea para reservar cita. Actualmente reservar cita está en una pantalla independiente, y así quiero que siga. Pero además, quiero añadir una sección en la pantalla principal que funcione como resumen y pasarela, con menos información y un botón intuitivo que te lleve a la página independiente de reservar cita.
+
+4. Después del hero y la sección de reservar, la tercera sección que quiero es la de "equipo" con las fotos de los tres barberos.
+
+5. La siguiente sección a esa, que sea la de galería. El material para esta sección y en general para toda la app sácalo de https://www.instagram.com/milabarberr/ y borra todo el contenido que hayas obtenido de https://www.instagram.com/milabarber10, esa es la cuenta antigua. Quiero además que la galería esté ordenada por secciones (peinados, vídeos, etc)
+
+6. La última sección que sea la de contacto, tal y como está ahora.
+
+7. Quiero que cuando estamos en una sección de la pantalla principal, bien porque hemos scrolleado bien porque hemos tocado un icono de la barra de navegación, la url se muestre como https://milabarber.vercel.app/<sección> es importante que uses '/' en lugar de '#' si una sección de la pantalla principal se llama igual que una pantalla independiente, como puede ser el caso por ejemplo de /reservar, cambiar simplemente el nombre de una de ellas (por ejemplo pedir-cita)

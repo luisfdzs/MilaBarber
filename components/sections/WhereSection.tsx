@@ -1,4 +1,5 @@
 import { site } from '@/content/site'
+import { sectionId } from '@/lib/routes'
 import {
   ClockIcon,
   MailIcon,
@@ -15,7 +16,7 @@ export function WhereSection() {
 
   return (
     <section
-      id="donde-estamos"
+      id={sectionId('where')}
       className="scroll-mt-24 border-t border-line bg-coal py-(--spacing-section)"
     >
       <div className="page-gutter mx-auto max-w-4xl text-center">

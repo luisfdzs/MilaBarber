@@ -127,27 +127,33 @@ pinta, pero todo lo que toca datos ajenos lo comprueba otra vez contra la base
   del cliente.
 
 Ya resuelto: correo saliente por Gmail, webhooks de revalidación en los dos entornos, la
-galería con trece fotos publicadas en Sanity (seis en la tira de la portada), y el vídeo de
-portada.
+galería por secciones con las veintiocho fotos y los seis vídeos de
+[@milabarberr](https://www.instagram.com/milabarberr) publicados en Sanity (seis en la tira
+de la portada), y el vídeo de portada.
+
+**La cuenta antigua era [@milabarber10](https://www.instagram.com/milabarber10) y ya no queda
+nada suyo**: ni en la galería, ni en el vídeo de portada, ni en `fotos-originales/`. Si
+aparece material nuevo, tiene que salir de @milabarberr.
 
 ---
 
 ## El vídeo de portada
 
-`public/hero/` lleva el montaje ya renderizado: el bucle de dieciocho segundos que se ve
-detrás del titular, en dos proporciones (apaisada y vertical) y en dos formatos (VP9 para
-todos, H.264 para Safari). Unos 14 MB en total, de los que el navegador se baja uno solo
-(entre 2,7 y 3,9 MB según proporción y formato). Cómo se reproduce está en
-`components/sections/HeroMontage.tsx`; cómo se genera, en `scripts/build-hero-montage.mjs`.
+`public/hero/` lleva el montaje ya renderizado: el bucle que se ve detrás del titular, en dos
+proporciones (apaisada y vertical) y en dos formatos (VP9 para todos, H.264 para Safari). El
+navegador se baja uno solo. Cómo se reproduce está en `components/sections/HeroMontage.tsx`;
+cómo se genera, en `scripts/build-hero-montage.mjs`.
 
-**La materia prima son ocho reels del Instagram de la barbería**
-([@milabarber10](https://www.instagram.com/milabarber10)), y en el bucle entran cuatro: el
-trozo de apertura con el corte y el cliente hablando a cámara, el peine sobre el pelo rizado,
-un blanco recién teñido y unas trenzas. Los otros cuatro —el lavado en el lavacabezas, una
-órbita por la pared de producto, un niño recién peinado y una nuca con un tatuaje de una
-rosa— están en `.hero-src/descartados/`, junto al material que no llegó a entrar. Los
-originales viven en `.hero-src/`, que está en `.gitignore` — al repositorio sólo va el
-resultado.
+**La materia prima son reels de [@milabarberr](https://www.instagram.com/milabarberr)**, y en
+el bucle entran cuatro, en este orden: unas trenzas, el peine levantando los rizos, un
+desvanecido bajo los neones y —al final— el cliente que se gira y hace el gesto con el brazo.
+El resto está en `.hero-src/descartados/`. Los originales viven en `.hero-src/`, que está en
+`.gitignore` — al repositorio sólo va el resultado.
+
+**El plano del gesto es el último a propósito.** Es el único con alguien mirando a cámara: de
+apertura compite con el titular, y de cierre remata el bucle. Empieza cuando ya está sentado
+en el sillón y acaba en cuanto termina el gesto; ni un fotograma más, porque lo que viene
+detrás en el reel es otro plano.
 
 Para volver a montarlo: `npm run hero`. **ffmpeg no hace falta instalarlo**, lo trae el
 paquete `ffmpeg-static` con `npm install`.
