@@ -40,6 +40,7 @@ export const galleryQuery = groq`
   *[_type == "galleryItem" && defined(image.asset)] | order(publishedAt desc) {
     _id,
     image{${imageFields}},
+    "video": video.asset->url,
     category,
     "barberName": barber->name,
     featured,

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { site } from '@/content/site'
 import { cn } from '@/lib/cn'
-import { href, isSection, navigation, routes } from '@/lib/routes'
+import { href, isHomePath, isSection, navigation, routes } from '@/lib/routes'
 import {
   CalendarIcon,
   CloseIcon,
@@ -58,10 +58,16 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
           {navigation.map((key) => {
             const target = href(key)
             const section = isSection(key)
-            const active = !section && onRoute(target)
+            const active = section ? pathname === target : onRoute(target)
             const className = cn('font-display text-title', active ? 'text-gold' : 'text-bone')
             return section ? (
-              <SectionLink key={key} href={target} onClick={close} className={className}>
+              <SectionLink
+                key={key}
+                href={target}
+                onClick={close}
+                aria-current={active ? 'page' : undefined}
+                className={className}
+              >
                 {routes[key].label}
               </SectionLink>
             ) : (
@@ -128,8 +134,9 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
           active={pathname === home}
           onClick={(event) => {
             close()
-            if (pathname === home) {
+            if (isHomePath(pathname)) {
               event.preventDefault()
+              window.history.replaceState(null, '', home)
               window.scrollTo({ top: 0 })
             }
           }}

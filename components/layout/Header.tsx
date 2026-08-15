@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/cn'
-import { href, isSection, navigation, routes } from '@/lib/routes'
+import { href, isHomePath, isSection, navigation, routes } from '@/lib/routes'
 import { UserIcon } from './NavIcons'
 import { SectionLink } from './SectionLink'
 import { Wordmark } from './Wordmark'
@@ -53,8 +53,9 @@ export function Header({ signedIn }: Props) {
           aria-label="Mila Barber · inicio"
           className="tap"
           onClick={(event) => {
-            if (pathname === home) {
+            if (isHomePath(pathname)) {
               event.preventDefault()
+              window.history.replaceState(null, '', home)
               window.scrollTo({ top: 0 })
             }
           }}
@@ -66,13 +67,18 @@ export function Header({ signedIn }: Props) {
           {navigation.map((key) => {
             const target = href(key)
             const section = isSection(key)
-            const active = !section && (pathname === target || pathname.startsWith(`${target}/`))
+            const active = pathname === target || (!section && pathname.startsWith(`${target}/`))
             const className = cn(
               'link-underline tap font-display text-micro tracking-[0.18em] uppercase transition-opacity',
               active ? 'text-gold opacity-100' : 'opacity-70 hover:opacity-100',
             )
             return section ? (
-              <SectionLink key={key} href={target} className={className}>
+              <SectionLink
+                key={key}
+                href={target}
+                aria-current={active ? 'page' : undefined}
+                className={className}
+              >
                 {routes[key].label}
               </SectionLink>
             ) : (

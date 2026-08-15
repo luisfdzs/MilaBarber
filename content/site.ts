@@ -29,7 +29,7 @@ export const site = {
   },
 
   social: {
-    instagram: 'https://www.instagram.com/milabarber10',
+    instagram: 'https://www.instagram.com/milabarberr',
     youtube: 'https://www.youtube.com/@milabarberr',
   },
 } as const

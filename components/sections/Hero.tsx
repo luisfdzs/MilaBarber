@@ -25,7 +25,7 @@ export function Hero({ text, media }: { text: BusinessText; media: HeroMedia }) 
           {text.heroLead && <span className="block text-gold">{text.heroLead}</span>}
         </h1>
 
-        <div className="mt-10">
+        <div className="mt-16 lg:mt-20">
           <HeroActions />
         </div>
 

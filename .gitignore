@@ -79,3 +79,8 @@ next-env.d.ts
 # Fotos y vídeos a resolución completa que manda la barbería. Al repositorio sólo van
 # las versiones optimizadas de public/, o directamente a Sanity.
 fotos-originales/
+
+# --- Notas de trabajo ---
+# Los encargos que manda la barbería, en crudo. Se quedan en la máquina de quien las
+# recibe: son el enunciado, y lo que va al repositorio es el resultado.
+NotasMila.txt

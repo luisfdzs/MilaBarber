@@ -1,13 +1,17 @@
 import { Figure } from '@/components/ui/Figure'
 import type { Barber } from '@/lib/content-types'
 import { formatDay, parseIsoDay } from '@/lib/format'
+import { sectionId } from '@/lib/routes'
 import { InstagramIcon } from '@/components/layout/NavIcons'
 
 export function TeamSection({ barbers }: { barbers: Barber[] }) {
   if (barbers.length === 0) return null
 
   return (
-    <section id="equipo" className="scroll-mt-24 border-t border-line py-(--spacing-section)">
+    <section
+      id={sectionId('team')}
+      className="scroll-mt-24 border-t border-line py-(--spacing-section)"
+    >
       <div className="page-gutter mx-auto max-w-6xl">
         <div className="text-center">
           <p className="eyebrow">Quién corta</p>
